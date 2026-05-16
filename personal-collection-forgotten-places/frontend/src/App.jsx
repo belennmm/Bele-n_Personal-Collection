@@ -88,37 +88,41 @@ function App(){
         </div>
       </section>
 
-            <section className="newEntryPage mx-auto max-w-7xl px-6 pb-20 md:px-16">
-        <div className="grid gap-10 border border-[#1E1A16] bg-[#FFF9EF] p-8 shadow-[10px_10px_0px_#1E1A16] md:grid-cols-[0.75fr_1.25fr] md:p-12">
-          <div className="entryIntro border-b border-[#1E1A16] pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-10">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8B5E3C]">New entry</p>
-            <h2 className="mt-4 text-5xl font-black uppercase leading-[0.9] tracking-[-0.07em] text-[#1E1A16]">Documentar un lugar olvidado</h2>
-            <p className="mt-6 text-base leading-7 text-[#4A4037]">Documenta el lugar que espléndido que haz visitado. Incluye todos los lugares para no olvidarlos.</p>
+              <section className="newEntryPage mx-auto max-w-7xl px-6 pb-24 md:px-16">
+        <div className="border-y border-[#1E1A16] py-14">
+          <div className="grid gap-14 md:grid-cols-[0.65fr_1.35fr]">
+            <div className="entryIntro md:sticky md:top-10 md:self-start">
+              <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#8B5E3C]">New entry</p>
+              <h2 className="mt-5 text-6xl font-black uppercase leading-[0.86] tracking-[-0.08em] text-[#1E1A16]">Documentar un lugar olvidado</h2>
+              <p className="mt-8 max-w-sm text-base leading-8 text-[#4A4037]">Documenta el lugar que espléndido que haz visitado. Incluye todos los lugares para no olvidarlos.</p>
 
-            <div className="mt-8 border-l-4 border-[#D6A84F] pl-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8B5E3C]">Travel note</p>
-              <p className="mt-2 text-sm leading-6 text-[#4A4037]">Piensa en cada experiencia vivida. Todo lo que haz disfrutado visitando estos lugares poco conocidos por los turistas.</p>
+              <div className="mt-10 border-l-2 border-[#D6A84F] pl-5">
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#8B5E3C]">Travel note</p>
+                <p className="mt-3 max-w-sm text-sm leading-7 text-[#4A4037]">Piensa en cada experiencia vivida. Todo lo que haz disfrutado visitando estos lugares poco conocidos por los turistas.</p>
+              </div>
+
+              <p className="mt-16 hidden text-xs font-bold uppercase tracking-[0.45em] text-[#8B5E3C] md:block">Page 01 / Field notes</p>
             </div>
-          </div>
 
-          <div className="entryWritingPage">
-            <FormularioItem onAgregarItem={agregarItem} />
+            <div className="entryWritingPage border-l-0 border-[#1E1A16] md:border-l md:pl-14">
+              <FormularioItem onAgregarItem={agregarItem} />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="archivePage mx-auto max-w-7xl px-6 pb-16 md:px-16">
-        <div className="border-t border-[#1E1A16] pt-12">
-          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
+        <div className="border-t border-[#1E1A16] pt-14">
+          <div className="mb-12 grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8B5E3C]">Archive</p>
-              <h2 className="mt-3 text-5xl font-black uppercase tracking-[-0.06em]">Archivo de lugares</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#8B5E3C]">Archive</p>
+              <h2 className="mt-5 text-6xl font-black uppercase leading-[0.9] tracking-[-0.08em]">Archivo de lugares</h2>
             </div>
 
-            <p className="max-w-md text-sm leading-6 text-[#4A4037]">¡Recuerda todos los lugares espléndidos que visitaste! Todos los forgotten places que hicieron de tu viaje una experiencia inolvidable.</p>
+            <p className="max-w-lg text-sm leading-7 text-[#4A4037]">¡Recuerda todos los lugares espléndidos que visitaste! Todos los forgotten places que hicieron de tu viaje una experiencia inolvidable.</p>
           </div>
 
-          <div className="archiveStartpage border border-[#1E1A16] bg-[#FFF9EF] p-8 shadow-[10px_10px_0px_#1E1A16]">
+          <div className="archiveStartpage border-t border-[#1E1A16] pt-10">
             <ListaItems
               items={itemsActivos}
               onArchivarItem={archivarItem}
