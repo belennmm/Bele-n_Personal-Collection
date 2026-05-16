@@ -8,7 +8,7 @@ En esta fase construí las dos piezas base del proyecto de forma independiente:
 1. Un frontend funcional en React con persistencia en LocalStorage.
 2. Un backend en Express con base de datos real y endpoints REST.
 
-![FASE 1 PREVIEW](./assets/FASE1_FP_preview.png)
+![FASE 1 PREVIEW](../assets/FASE1_FP_preview.png)
 
 
 ## Elementos realizados
@@ -66,34 +66,34 @@ GET /api/items
 
 Para este endpoint, este obtiene todos los lugares activos guardados.
 
-![GET FP](./assets/GET%20FP.png)
+![GET FP](../assets/GET%20FP.png)
 
 POST /api/items
 
 Crear un nuevo lugar olvidado dentro de la colección.
 
-![POST FP](./assets/POST%20FP.png)
+![POST FP](../assets/POST%20FP.png)
 
 Manejo de errores en POST /api/items
 
 También probé el manejo de errores al intentar crear un item sin cumplir con los datos requeridos.
 
-![POST Manejo de errores FP](./assets/POST%20Manejo%20de%20errores%20FP.png)
+![POST Manejo de errores FP](../assets/POST%20Manejo%20de%20errores%20FP.png)
 
 PUT /api/items/:id
 
 Este endpoint actualiza la información de un lugar existente.
 
-![PUT FP](./assets/PUT%20FP.png)
+![PUT FP](../assets/PUT%20FP.png)
 
 /api/items/:id/registro
 
 Utilicé este endpoint para crear un registro de actividad asociado a un lugar específico.
 
-![POST Registro FP](./assets/POST%20Registro%20FP.png)
+![POST Registro FP](../assets/POST%20Registro%20FP.png)
 
 DELETE /api/items/:id
 
 Utilicé este endpoint para archivar un lugar.
 
-![DELETE FP](./assets/DELETE%20FP.png)
+![DELETE FP](../assets/DELETE%20FP.png)
