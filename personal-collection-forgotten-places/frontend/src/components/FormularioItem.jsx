@@ -55,79 +55,110 @@ function FormularioItem({ onAgregarItem }){
     setNotas(""  );
   }
 
-  return(
+    return(
 
-    <form onSubmit={handleSubmit } className="formulario">
+    <form onSubmit={handleSubmit } className="formularioMagazine grid gap-5">
 
-      <h2>Agregar Lugares</h2>
-
-      <div className="campo-formulario">
-        <label htmlFor="nombre"> Nombre del lugar  </label>
-        <input id="nombre" type="text" placeholder=" Nombre del lugar" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+      <div className="border-b border-[#1E1A16] pb-5">
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#8B5E3C]">Field notes</p>
+        <h2 className="mt-2 text-3xl font-black uppercase tracking-[-0.04em] text-[#1E1A16]">Agregar Lugar</h2>
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="pais"> País </label>
-        <input id="pais" type="text" placeholder="País" value={pais} onChange={(e) => setPais(e.target.value)} required  />
+      <div className="campo-formulario grid gap-2">
+        <label htmlFor="nombre" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Nombre del lugar</label>
+        <input id="nombre" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="text" placeholder="Nombre del lugar" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="categoria"> Categoría </label>
-        <select id="categoria" value={categoriaId } onChange={(e)  => setCategoriaId(e.target.value)}>
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="pais" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">País</label>
+          <input id="pais" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="text" placeholder="País" value={pais} onChange={(e) => setPais(e.target.value)} required  />
+        </div>
 
-          {CATEGORIAS.map( (categoria) => ( <option key={categoria.id} value={categoria.id}> {categoria.nombre} </option> ))}
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="categoria" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Categoría</label>
+          <select id="categoria" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none focus:border-[#D6A84F]" value={categoriaId } onChange={(e)  => setCategoriaId(e.target.value)}>
 
-        </select>
+            {CATEGORIAS.map( (categoria) => (
+              <option key={categoria.id} value={categoria.id}> {categoria.nombre} </option>
+            ))}
+
+          </select>
+        </div>
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="estado">Estado de exploración</label>
-        <select id="estado" value={estado} onChange={(e)  => setEstado(e.target.value) } >
-          {ESTADOS.map((estadoItem) => ( <option key = {estadoItem} value= {estadoItem} > {estadoItem} </option> ))}
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="estado" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Estado de exploración</label>
+          <select id="estado" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none focus:border-[#D6A84F]" value={estado} onChange={(e)  => setEstado(e.target.value) } >
+            {ESTADOS.map((estadoItem) => (
+              <option key = {estadoItem} value= {estadoItem} > {estadoItem} </option>
+            ))}
 
-        </select>
+          </select>
+        </div>
+
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="puntuacion" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Puntuación personal</label>
+          <input id="puntuacion" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="number"  placeholder="Puntuación 0-10" min="0" max="10" value={puntuacion}  onChange={(e) => setPuntuacion(e.target.value)} />
+        </div>
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="puntuacion"> Puntuación personal </label>
-        <input id="puntuacion" type="number"  placeholder="Puntuación 0-10" min="0" max="10" value={puntuacion}  onChange={(e) => setPuntuacion(e.target.value)} />
-      </div>
-
-      <div className="campo-formulario">
-        <label htmlFor="nivelOlvido"> ¿Qué tan olvidado consideras que está el lugar por turistas? </label>
-        <select id="nivelOlvido" value={nivelOlvido} onChange={(e) => setNivelOlvido(e.target.value)} >
+      <div className="campo-formulario grid gap-2">
+        <label htmlFor="nivelOlvido" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]"> ¿Qué tan olvidado consideras que está el lugar por turistas? </label>
+        <select id="nivelOlvido" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none focus:border-[#D6A84F]" value={nivelOlvido} onChange={(e) => setNivelOlvido(e.target.value)} >
           <option value="bajo">Poco olvidado</option>
           <option value="medio">Medio olvidado</option>
           <option value="alto">Muy olvidado</option>
         </select>
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="epoca">Época o contexto</label>
-        <input id="epoca"  type="text"  placeholder="Época o contexto histórico"
-          value={epoca} onChange={(e) => setEpoca(e.target.value)}  />
+      <div className="grid gap-5 md:grid-cols-2">
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="epoca" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Época o contexto</label>
+          <input
+            id="epoca"
+            className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]"
+            type="text"
+            placeholder="Época o contexto histórico"
+            value={epoca}
+            onChange={(e) => setEpoca(e.target.value)}
+          />
+        </div>
+
+        <div className="campo-formulario grid gap-2">
+          <label htmlFor="acceso" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Acceso</label>
+          <select id="acceso" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none focus:border-[#D6A84F]" value={acceso} onChange={(e) => setAcceso(e.target.value)}>
+            <option value="facil">Acceso fácil</option>
+            <option value="moderado">Acceso moderado</option>
+            <option value="dificil">Acceso difícil</option>
+          </select>
+        </div>
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="acceso">Acceso </label>
-        <select id="acceso" value={acceso} onChange={(e) => setAcceso(e.target.value)}>
-          <option value="facil"> Acceso fácil  </option>
-          <option value="moderado"> Acceso moderado </option>
-          <option value="dificil"> Acceso difícil </option>
-        </select>
+      <div className="campo-formulario grid gap-2">
+        <label htmlFor="razonInteres" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Razón de interés</label>
+        <textarea
+          id="razonInteres"
+          className="min-h-28 border border-[#1E1A16] bg-transparent p-4 text-lg leading-7 outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]"
+          placeholder="Escribe por qué este lugar merece ser recordado..."
+          value={razonInteres}
+          onChange={(e) => setRazonInteres(e.target.value)}
+        />
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="razonInteres"> Razón de interés </label>
-        <textarea id="razonInteres" placeholder="Razón de interés"value={razonInteres} onChange={(e) => setRazonInteres(e.target.value)} />
+      <div className="campo-formulario grid gap-2">
+        <label htmlFor="notas" className="text-xs font-bold uppercase tracking-[0.22em] text-[#8B5E3C]">Notas personales</label>
+        <textarea
+          id="notas"
+          className="min-h-24 border border-[#1E1A16] bg-transparent p-4 text-lg leading-7 outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]"
+          placeholder="Agrega detalles, recuerdos, dudas o ideas para investigar..."
+          value={notas}
+          onChange={(e) => setNotas(e.target.value)}
+        />
       </div>
 
-      <div className="campo-formulario">
-        <label htmlFor="notas"> Notas personales </label>
-        <textarea id="notas" placeholder="Notas personales" value={notas}  onChange={(e) => setNotas(e.target.value)} />
-      </div>
-
-      <button type="submit"> Agregar un lugar </button>
+      <button className="mt-2 border border-[#1E1A16] bg-[#1E1A16] px-6 py-4 text-sm font-bold uppercase tracking-[0.28em] text-[#F4EFE6] transition hover:bg-[#D6A84F] hover:text-[#1E1A16]" type="submit">Agregar un lugar</button>
     </form>
   );
 }

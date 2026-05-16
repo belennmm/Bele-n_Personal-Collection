@@ -37,8 +37,8 @@ function App(){
   const itemsActivos = items.filter((item) => item.activo);
 
   return (
-    <main className="min-h-screen bg-[#F4EFE6] text-[#1E1A16]">
-      <section className="heroStartpage relative min-h-[85vh] overflow-hidden border-b border-[#1E1A16] bg-[#1E1A16] text-[#F4EFE6]">
+    <main className="min-h-screen bg-[#F4EFE6] text-[#1a1919]">
+      <section className="heroStartpage relative min-h-[85vh] overflow-hidden border-b border-[#0a0a0a] bg-[#0a0a0a] text-[#F4EFE6]">
         <div className="hidden md:flex absolute left-6 top-8 h-[80%] items-center">
           <p className="rotate-180 [writing-mode:vertical-rl] text-xs font-semibold uppercase tracking-[0.6em] text-[#D6A84F]">Forgotten Places</p>
         </div>
@@ -62,9 +62,9 @@ function App(){
           <div className="coverMagazine border border-[#D6A84F] p-6">
             <p className="mb-8 text-right text-xs uppercase tracking-[0.4em] text-[#D6A84F]">Vol. 01</p>
 
-            <div className="aspect-[3/4] border border-[#F4EFE6] bg-[#2F2A24] p-6">
+            <div className="aspect-[3/4] border border-[#F4EFE6] bg-[#524736] p-6">
               <div className="flex h-full flex-col justify-between">
-                <p className="text-sm uppercase tracking-[0.35em] text-[#D6A84F]">The travel archive</p>
+                <p className="text-sm uppercase tracking-[0.35em] text-[#D6A84F]">The travel page</p>
 
                 <div>
                   <p className="text-4xl font-black uppercase leading-none">Hidden<br />Central<br />America</p>
@@ -88,21 +88,43 @@ function App(){
         </div>
       </section>
 
-      <section className="contenidoJournal mx-auto grid max-w-7xl gap-8 px-6 pb-16 md:grid-cols-[420px_1fr] md:px-16">
-        <div className="formularioStartpage rounded-none border border-[#1E1A16] bg-[#FFF9EF] p-6 shadow-[8px_8px_0px_#1E1A16]">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#8B5E3C]">New entry</p>
+            <section className="newEntryPage mx-auto max-w-7xl px-6 pb-20 md:px-16">
+        <div className="grid gap-10 border border-[#1E1A16] bg-[#FFF9EF] p-8 shadow-[10px_10px_0px_#1E1A16] md:grid-cols-[0.75fr_1.25fr] md:p-12">
+          <div className="entryIntro border-b border-[#1E1A16] pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-10">
+            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8B5E3C]">New entry</p>
+            <h2 className="mt-4 text-5xl font-black uppercase leading-[0.9] tracking-[-0.07em] text-[#1E1A16]">Documentar un lugar olvidado</h2>
+            <p className="mt-6 text-base leading-7 text-[#4A4037]">Documenta el lugar que espléndido que haz visitado. Incluye todos los lugares para no olvidarlos.</p>
 
-          <FormularioItem onAgregarItem={agregarItem} />
+            <div className="mt-8 border-l-4 border-[#D6A84F] pl-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#8B5E3C]">Travel note</p>
+              <p className="mt-2 text-sm leading-6 text-[#4A4037]">Piensa en cada experiencia vivida. Todo lo que haz disfrutado visitando estos lugares poco conocidos por los turistas.</p>
+            </div>
+          </div>
+
+          <div className="entryWritingPage">
+            <FormularioItem onAgregarItem={agregarItem} />
+          </div>
         </div>
+      </section>
 
-        <div className="archiveStartpage rounded-none border border-[#1E1A16] bg-[#FFF9EF] p-6 shadow-[8px_8px_0px_#1E1A16]">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#8B5E3C]">Archive</p>
+      <section className="archivePage mx-auto max-w-7xl px-6 pb-16 md:px-16">
+        <div className="border-t border-[#1E1A16] pt-12">
+          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#8B5E3C]">Archive</p>
+              <h2 className="mt-3 text-5xl font-black uppercase tracking-[-0.06em]">Archivo de lugares</h2>
+            </div>
 
-          <ListaItems
-            items={itemsActivos}
-            onArchivarItem={archivarItem}
-            onCambiarEstadoItem={cambiarEstadoItem}
-          />
+            <p className="max-w-md text-sm leading-6 text-[#4A4037]">¡Recuerda todos los lugares espléndidos que visitaste! Todos los forgotten places que hicieron de tu viaje una experiencia inolvidable.</p>
+          </div>
+
+          <div className="archiveStartpage border border-[#1E1A16] bg-[#FFF9EF] p-8 shadow-[10px_10px_0px_#1E1A16]">
+            <ListaItems
+              items={itemsActivos}
+              onArchivarItem={archivarItem}
+              onCambiarEstadoItem={cambiarEstadoItem}
+            />
+          </div>
         </div>
       </section>
     </main>
