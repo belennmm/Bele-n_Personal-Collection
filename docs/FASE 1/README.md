@@ -8,6 +8,8 @@ En esta fase construí las dos piezas base del proyecto de forma independiente:
 1. Un frontend funcional en React con persistencia en LocalStorage.
 2. Un backend en Express con base de datos real y endpoints REST.
 
+[Video FASE 1 PREVIEW](https://canva.link/68wm09o7i3t5rbo)
+
 ![FASE 1 PREVIEW](../assets/FASE1_FP_preview.png)
 
 
