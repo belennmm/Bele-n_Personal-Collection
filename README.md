@@ -6,10 +6,10 @@ La idea de mi proyecto es crear un journal de viajes para travelers que disfruta
 
 ## Fases del proyecto
 
-- [Fase 1: useState, useEffect, LocalStorage y Backend](./docs/Fase%1/README.md)
-- [Fase 2: useContext, useRef y tema visual](./docs/Fase%2/README.md)
-- [Fase 3: useReducer, gráficas y optimización](./docs/Fase%3/README.md)
-- [Fase 4: custom hooks, deploy y entrega final](./docs/Fase%4/README.md)
+- [Fase 1: useState, useEffect, LocalStorage y Backend](./docs/FASE%201/README.md)
+- [Fase 2: useContext, useRef y tema visual](./docs/FASE%202/README.md)
+- [Fase 3: useReducer, gráficas y optimización](./docs/FASE%203/README.md)
+- [Fase 4: custom hooks, deploy y entrega final](./docs/FASE%204/README.md)
 
 
 ## Tecnologías principales
