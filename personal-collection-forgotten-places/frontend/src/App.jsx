@@ -119,23 +119,29 @@ function App(){
         </div>
       </section>
 
-            <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
-        <div className="border-t border-[#D6A84F] pt-14">
-          <div className="mb-12 grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#C08457]">Archive</p>
-              <h2 className="mt-5 text-6xl font-black uppercase leading-[0.9] tracking-[-0.08em]">Archivo de lugares</h2>
+                        <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
+              <div className="bg-[#F7EEDC] px-8 py-14 text-[#17120E] md:px-12">
+          <div className="grid gap-14 md:grid-cols-[0.65fr_1.35fr]">
+            <div className="archiveIntro md:sticky md:top-10 md:self-start">
+              <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#915a2d]">Archive</p>
+              <h2 className="mt-5 text-6xl font-black uppercase leading-[0.86] tracking-[-0.08em] text-[#D6A84F]">Archivo de lugares</h2>
+              <p className="mt-8 max-w-sm text-base leading-8 text-[#1E1A16]">¡Recuerda todos los lugares espléndidos que visitaste! Todos los forgotten places que hicieron de tu viaje una experiencia inolvidable.</p>
+
+              <div className="mt-10 border-l-2 border-[#D6A84F] pl-5">
+                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#915a2d]">Archive note</p>
+                <p className="mt-3 max-w-sm text-sm leading-7 text-[#1E1A16]">Cada lugar guardado funciona como una pequeña entrada de revista dentro de tu colección personal de viajes.</p>
+              </div>
+
+              <p className="mt-16 hidden text-xs font-bold uppercase tracking-[0.45em] text-[#915a2d] md:block">Page 02 / Travel archive</p>
             </div>
 
-            <p className="max-w-lg text-sm leading-7 text-[#F4EFE6]">¡Recuerda todos los lugares espléndidos que visitaste! Todos los forgotten places que hicieron de tu viaje una experiencia inolvidable.</p>
-          </div>
-
-          <div className="archiveStartpage border-t border-[#D6A84F] pt-10">
-            <ListaItems
-              items={itemsActivos}
-              onArchivarItem={archivarItem}
-              onCambiarEstadoItem={cambiarEstadoItem}
-            />
+            <div className="archiveWritingPage border-l-0 border-[#D6A84F] md:border-l md:pl-14">
+              <ListaItems
+                items={itemsActivos}
+                onArchivarItem={archivarItem}
+                onCambiarEstadoItem={cambiarEstadoItem}
+              />
+            </div>
           </div>
         </div>
       </section>
