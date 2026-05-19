@@ -3,8 +3,14 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 
+import StorageProvider from './context/StorageProvider.jsx'
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <StorageProvider>
+      <App />
+    </StorageProvider>
+   
   </StrictMode>,
 )
