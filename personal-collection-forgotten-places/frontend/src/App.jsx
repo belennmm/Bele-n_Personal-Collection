@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useContext, useState } from "react";
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
-import { useEffect, useContext, useState } from "react";
 import { StorageContext } from "./context/StorageContext" ;
 
 
@@ -178,7 +177,7 @@ function App(){
 
             <div className="archiveWritingPage border-l-0 border-[#D6A84F] md:border-l md:pl-14">
               <ListaItems
-                items={itemsActivos}
+                items={itemsqueActivos}
                 onArchivarItem={archivarItem}
                 onCambiarEstadoItem={cambiarEstadoItem}
               />
