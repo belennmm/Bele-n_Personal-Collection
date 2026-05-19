@@ -2,39 +2,63 @@ import { useState, useEffect } from "react";
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
+import { useEffect, useContext, useState } from "react";
+import { StorageContext } from "./context/StorageContext" ;
+
 
 
 function App(){
 
-  const [items, setItems] = useState(() => {
-    try { const guardado = localStorage.getItem( "items");
-      return guardado ? JSON.parse(guardado) : [];
-    } 
-    catch {
-      return [];
+  const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem } = useContext( StorageContext) ;
+
+
+  const [items, setItems] = useState([]);
+  
+    useEffect(() => {
+      async function cargarItems() {
+        const data = await obtenerItems() ;
+        setItems(data) ;
+      }
+      
+      cargarItems() ;
+    } , [obtenerItems, modo]) ;
+
+    async function agregarItem(newItem) {
+      const itemGuardado = await guardarItem(newItem) ;
+      if(itemGuardado){
+        setItems([...items, itemGuardado]) ;
+      }
     }
-  } );
 
-  useEffect(() => { localStorage.setItem("items", JSON.stringify(items)) ; }, [items]);
+    async function archivarItem(id) {
+      const exito = await eliminarItem(id) ;
+      if(exito){
+        const listaUpdated = items.map((item) =>
+          item.id ===  id ? { ...item , activo: false } : item
+        );
+        
+        setItems(listaUpdated);
+      }
+    }
 
-  function agregarItem(nuevoItem) { setItems([...items, nuevoItem]);}
+    async function cambiarEstadoItem(id, nuevoEstado) {
+      const itemActual = items.find((item) => item.id === id) ;
+      if(!itemActual){ return ; }
 
-  function archivarItem(id) { const listaUpdated = items.map((item) =>
-      item.id ===  id ? { ...item , activo: false } : item
-    );
+      const itemUpdated = { ...itemActual , estado: nuevoEstado , fechaActividad: new Date().toISOString() } ;
 
-    setItems(listaUpdated);
-  }
+      const actualizado = await actualizarItem(id , itemUpdated) ;
 
-  function cambiarEstadoItem(id, nuevoEstado) {
-    const listaUpdated = items.map((item) =>
-      item.id === id ? { ...item, estado: nuevoEstado, fechaActividad: new Date().toISOString() } : item
-    );
+      if(actualizado){
+        const listaUpdated = items.map((item) =>
+          item.id === id ? { ...item, estado: nuevoEstado , fechaActividad: new Date().toISOString() } : item
+        );
+        
+        setItems(listaUpdated);
+      }
+    }
 
-    setItems(listaUpdated);
-  }
-
-  const itemsActivos = items.filter((item) => item.activo);
+    const itemsqueActivos = items.filter((item) => item.activo) ;
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-[#F4EFE6]">
@@ -83,6 +107,23 @@ function App(){
           <p className="text-xs font-bold uppercase tracking-[0.45em] text-[#D6A84F]">splendid forgotten places / Central America</p>
           <div className="h-px flex-1 bg-[#D6A84F]"></div>
         </div>
+      </section>
+
+      <section className="modoStorage mx-auto max-w-7xl px-6 pb-8 md:px-16">
+        <div className="flex flex-wrap items-center justify-between gap-4 border border-[#D6A84F] px-5 py-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[#D6A84F]">Storage mode</p>
+            <p className="mt-1 text-sm text-[#F4EFE6]">Modo actual: {modo}</p>
+          </div>
+
+          <div className="flex gap-3">
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "local" ? "bg-[#D6A84F] text-[#0a0a0a]" : "border border-[#D6A84F] text-[#D6A84F]"}`} type="button" onClick={() => setModo("local")}>Local</button>
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "api" ? "bg-[#D6A84F] text-[#0a0a0a]" : "border border-[#D6A84F] text-[#D6A84F]"}`} type="button" onClick={() => setModo("api")}>API</button>
+          </div>
+        </div>
+
+        {cargando && <p className="mt-3 text-sm text-[#D6A84F]">Cargando datos...</p>}
+        {error && <p className="mt-3 text-sm text-[#C08457]">Error: {error}</p>}
       </section>
 
       <section className="aboutCollection mx-auto max-w-7xl px-6 py-14 md:px-16">
