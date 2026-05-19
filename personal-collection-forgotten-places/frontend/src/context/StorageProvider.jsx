@@ -9,6 +9,7 @@ function StorageProvider({ children }){
   const [error , setError ] = useState(null) ;
 
   const API_URL = import.meta.env.VITE_API_URL  || "http://localhost:3001" ;
+  console.log("API_URL:" , API_URL) ;
 
   function setModo(nuevoModo){
     setModoState(nuevoModo) ;
@@ -172,7 +173,7 @@ function StorageProvider({ children }){
       {children}
     </StorageContext.Provider>
   ) ;
-  
+
 }
 
 export default StorageProvider ;
