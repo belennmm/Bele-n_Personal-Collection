@@ -109,12 +109,13 @@ function App(){
           <div className="h-px flex-1 bg-[var(--color-acento)]"></div>
         </div>
       </section>
-
-
-      <button className="rounded-full border border-[var(--color-acento)] px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-acento)] transition hover:bg-[var(--color-acento)] hover:text-[var(--color-fondo)]" type="button" onClick={toggleTema}>
-        Tema: {tema}
-      </button>
       
+      <div className="flex justify-center my-6">
+        <button className="rounded-full border border-[var(--color-acento)] px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-acento)] transition hover:bg-[var(--color-acento)] hover:text-[var(--color-fondo)]" type="button" onClick={toggleTema}>
+          Tema: {tema}
+        </button>
+      </div>
+            
       <section className="modoStorage mx-auto max-w-7xl px-6 pb-8 md:px-16">
         <div className="flex flex-wrap items-center justify-between gap-4 border border-[var(--color-acento)] px-5 py-4">
           <div>

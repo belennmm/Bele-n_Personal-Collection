@@ -4,20 +4,24 @@ body[data-theme="oscuro"] {
   --color-fondo: #0a0a0a;
   --color-pagina: #F7EEDC;
   --color-texto: #F4EFE6;
+  --color-texto-suave: #E9DDC8;
   --color-texto-pagina: #17120E;
   --color-acento: #D6A84F;
   --color-acento-secundario: #C08457;
-  --color-linea: #D6A84F;
+  --color-titulo-pagina: #915a2d;
+  --color-cover: #735d49;
 }
 
 body[data-theme="claro"] {
   --color-fondo: #F7EEDC;
   --color-pagina: #FFF9EF;
   --color-texto: #17120E;
+  --color-texto-suave: #4A4037;
   --color-texto-pagina: #17120E;
   --color-acento: #915a2d;
   --color-acento-secundario: #735d49;
-  --color-linea: #17120E;
+  --color-titulo-pagina: #735d49;
+  --color-cover: #D8C8AE;
 }
 
 body {
