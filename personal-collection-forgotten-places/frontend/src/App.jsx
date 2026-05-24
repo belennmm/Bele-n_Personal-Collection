@@ -76,6 +76,16 @@ function App(){
       }
     }
 
+    async function editarItem(id , itemUpdated) {
+    const actualizado = await actualizarItem(id , itemUpdated) ;
+
+    if(actualizado){
+      const listaUpdated = items.map((item) => item.id === id ? { ...item , ...actualizado } : item ) ;
+
+      setItems(listaUpdated) ;
+    }
+  }
+
     const itemsqueActivos = items.filter((item) => item.activo) ;
 
    return (
@@ -206,12 +216,14 @@ function App(){
             </div>
 
             <div className="archiveWritingPage border-l-0 border-[var(--color-acento)] md:border-l md:pl-14">
+              
               <ListaItems
                 items={itemsqueActivos}
                 onArchivarItem={archivarItem}
-                onCambiarEstadoItem={cambiarEstadoItem}
+                onEditarItem={editarItem}
               />
             </div>
+            
           </div>
         </div>
       </section>
