@@ -30,6 +30,11 @@ function FormularioItem({ onAgregarItem }){
 
     e.preventDefault() ;
 
+    if(!puntuacion){
+      alert("Selecciona una calificación de 1 a 5 estrellas") ;
+      return ;
+    }
+
     const nuevoItem = {
       id: crypto.randomUUID() ,
       nombre: nombre.trim() ,
@@ -112,8 +117,17 @@ function FormularioItem({ onAgregarItem }){
         </div>
 
         <div className="campo-formulario grid gap-2">
-          <label htmlFor="puntuacion" className="text-xs font-bold uppercase tracking-[0.22em] text-[#915a2d]">Puntuación personal</label>
-          <input id="puntuacion" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="number"  placeholder="Puntuación 0-10" min="0" max="10" value={puntuacion}  onChange={(e) => setPuntuacion(e.target.value)} />
+          <label className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-titulo-pagina)]">Puntuación personal</label>
+
+          <div className="flex gap-2 border-b border-[var(--color-acento)] pb-3">
+            {[1 , 2 , 3 , 4 , 5].map((estrella) => (
+              <button className={`text-3xl transition ${estrella <= Number(puntuacion) ? "text-[var(--color-acento)]" : "text-[#CBBDA6] hover:text-[var(--color-acento)]"}`} key={estrella} type="button" onClick={() => setPuntuacion(estrella)}>
+                ★
+              </button>
+            ))}
+          </div>
+
+          <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-titulo-pagina)]">{puntuacion ? `${puntuacion} de 5 estrellas` : "Selecciona una calificación"}</p>
         </div>
       </div>
 

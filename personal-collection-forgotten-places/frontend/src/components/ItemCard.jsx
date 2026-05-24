@@ -148,8 +148,17 @@ function ItemCard({ item, onArchivarItem, onEditarItem }) {
             </div>
 
             <div className="campoEdit grid gap-2">
-              <label htmlFor={`puntuacion-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Puntuación personal</label>
-              <input id={`puntuacion-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" type="number" name="puntuacion" min="0" max="10" value={formEdit.puntuacion} onChange={cambiarCampo} />
+              <label className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Puntuación personal</label>
+
+              <div className="flex gap-2 border-b border-[var(--color-acento)] pb-3">
+                {[1 , 2 , 3 , 4 , 5].map((estrella) => (
+                  <button className={`text-3xl transition ${estrella <= Number(formEdit.puntuacion) ? "text-[var(--color-acento)]" : "text-[#CBBDA6] hover:text-[var(--color-acento)]"}`} key={estrella} type="button" onClick={() => setFormEdit({ ...formEdit , puntuacion: estrella })}>
+                    ★
+                  </button>
+                ))}
+              </div>
+
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-titulo-pagina)]">{formEdit.puntuacion ? `${formEdit.puntuacion} de 5 estrellas` : "Selecciona una calificación"}</p>
             </div>
           </div>
 
@@ -236,7 +245,17 @@ function ItemCard({ item, onArchivarItem, onEditarItem }) {
 
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-[var(--color-titulo-pagina)]">Puntuación personal</p>
-          <p className="mt-2 text-lg text-[var(--color-texto-pagina)]">{item.puntuacion !== null ? `${item.puntuacion}/10` : "Sin puntuación"}</p>
+
+          {item.puntuacion !== null ? (
+            <div className="mt-3 flex items-center gap-1">
+              {[1 , 2 , 3 , 4 , 5].map((estrella) => (
+                <span className={`text-2xl ${estrella <= Number(item.puntuacion) ? "text-[var(--color-acento)]" : "text-[#CBBDA6]"}`} key={estrella}>★</span>
+              ))}
+              <span className="ml-3 text-sm text-[var(--color-texto-pagina)]">{item.puntuacion}/5</span>
+            </div>
+          ) : (
+            <p className="mt-2 text-lg text-[var(--color-texto-pagina)]">Sin puntuación</p>
+          )}
         </div>
       </div>
 
