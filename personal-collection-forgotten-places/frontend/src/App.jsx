@@ -4,6 +4,7 @@ import ListaItems from "./components/ListaItems" ;
 
 import { StorageContext } from "./context/StorageContext" ;
 import { ThemeContext } from "./context/ThemeContext" ;
+import JournalTimer from "./components/JournalTimer" ;
 
 
 
@@ -115,6 +116,8 @@ function App(){
           Tema: {tema}
         </button>
       </div>
+
+      <JournalTimer />
             
       <section className="modoStorage mx-auto max-w-7xl px-6 pb-8 md:px-16">
         <div className="flex flex-wrap items-center justify-between gap-4 border border-[var(--color-acento)] px-5 py-4">

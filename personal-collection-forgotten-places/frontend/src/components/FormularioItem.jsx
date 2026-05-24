@@ -1,5 +1,4 @@
-import { useState } from "react" ;
-import { CATEGORIAS } from "../utils/categorias" ;
+import { useState,  useRef } from "react" ;import { CATEGORIAS } from "../utils/categorias" ;
 import { ESTADOS } from "../utils/estados" ;
 
 function FormularioItem({ onAgregarItem }){
@@ -13,6 +12,8 @@ function FormularioItem({ onAgregarItem }){
   const [ acceso , setAcceso ] = useState( "moderado" ) ;
   const [ razonInteres , setRazonInteres ] =  useState("") ;
   const [notas , setNotas ] = useState("") ;
+
+    const nombreInputRef = useRef(null) ;
 
   function handleSubmit(e){
 
@@ -53,6 +54,7 @@ function FormularioItem({ onAgregarItem }){
     setAcceso("moderado" );
     setRazonInteres("" ) ;
     setNotas(""  );
+    nombreInputRef.current.focus( ) ;
   }
 
     return(
@@ -66,7 +68,7 @@ function FormularioItem({ onAgregarItem }){
 
       <div className="campo-formulario grid gap-2">
         <label htmlFor="nombre" className="text-xs font-bold uppercase tracking-[0.22em] text-[#915a2d]">Nombre del lugar</label>
-        <input id="nombre" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="text" placeholder="Nombre del lugar" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+        <input ref={nombreInputRef} id="nombre" className="border-0 border-b border-[#1E1A16] bg-transparent px-0 py-2 text-lg outline-none placeholder:text-[#8A8178] focus:border-[#D6A84F]" type="text" placeholder="Nombre del lugar" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
