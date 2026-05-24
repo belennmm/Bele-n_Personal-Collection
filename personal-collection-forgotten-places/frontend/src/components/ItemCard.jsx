@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { animate } from "animejs";
 import { CATEGORIAS } from "../utils/categorias";
 import { ESTADOS } from "../utils/estados";
 
 function ItemCard({ item, onArchivarItem, onEditarItem }) {
   const categoria = CATEGORIAS.find((cat) => cat.id === item.categoriaId);
+
+  const [mostrarEmoji, setMostrarEmoji] = useState(false);
+  const categoriaMarkerRef = useRef(null);
 
   const [editando, setEditando] = useState(false);
   const [formEdit, setFormEdit] = useState({
@@ -21,6 +25,17 @@ function ItemCard({ item, onArchivarItem, onEditarItem }) {
       razonInteres: item.atributos?.razonInteres || ""
     }
   });
+
+    function cambiarMarkerCategoria() {
+    animate(categoriaMarkerRef.current, {
+      scale: [1, 0.7, 1],
+      rotate: mostrarEmoji ? "-1turn" : "1turn",
+      duration: 550,
+      ease: "inOut(3)"
+    });
+
+    setMostrarEmoji(!mostrarEmoji);
+  }
 
   function iniciarEdicion() {
     setFormEdit({
@@ -191,7 +206,9 @@ function ItemCard({ item, onArchivarItem, onEditarItem }) {
           <p className="mt-4 text-xl text-[var(--color-texto-pagina)]">{item.atributos?.pais || "Sin país"}</p>
         </div>
 
-        <span className="mt-1 h-4 w-4 rounded-full" style={{ backgroundColor: categoria?.color || "#999" }}></span>
+        <button ref={categoriaMarkerRef} className="mt-1 flex h-10 w-10 items-center justify-center rounded-full border border-transparent text-xl transition hover:border-[var(--color-acento)]" style={{ backgroundColor: mostrarEmoji ? "transparent" : categoria?.color || "#999" }} type="button" onClick={cambiarMarkerCategoria} aria-label={mostrarEmoji ? "Mostrar color de la categoría" : "Mostrar emoji de la categoría"} title={mostrarEmoji ? "Ver color de categoría" : "Ver emoji de categoría"}>
+          {mostrarEmoji && categoria?.emoji}
+        </button>
       </div>
 
       <div className="my-8 h-px bg-[var(--color-acento)]"></div>
