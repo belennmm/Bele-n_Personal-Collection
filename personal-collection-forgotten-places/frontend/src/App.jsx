@@ -16,6 +16,22 @@ function App(){
 
   const [items, setItems] = useState([]);
   
+  useEffect(() => {
+
+      function cambiarTemaConAtajo(e){
+         
+        const escribiendo =["INPUT" , "TEXTAREA", "SELECT"].includes( e.target.tagName) ;
+
+        if(escribiendo ){ return ;}
+
+        if(e.key.toLowerCase( ) === "t" ){ toggleTema(); }
+      }
+
+      window.addEventListener("keydown" , cambiarTemaConAtajo) ;
+
+      return () => { window.removeEventListener( "keydown", cambiarTemaConAtajo) ;} ;
+  } , [toggleTema] ) ;
+  
     useEffect(() => {
       async function cargarItems() {
         const data = await obtenerItems() ;

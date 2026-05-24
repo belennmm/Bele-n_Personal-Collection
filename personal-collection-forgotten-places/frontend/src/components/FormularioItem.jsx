@@ -1,4 +1,5 @@
-import { useState,  useRef } from "react" ;import { CATEGORIAS } from "../utils/categorias" ;
+import { useState, useRef , useEffect }  from "react" ;
+import { CATEGORIAS } from "../utils/categorias" ;
 import { ESTADOS } from "../utils/estados" ;
 
 function FormularioItem({ onAgregarItem }){
@@ -14,6 +15,16 @@ function FormularioItem({ onAgregarItem }){
   const [notas , setNotas ] = useState("") ;
 
     const nombreInputRef = useRef(null) ;
+
+  useEffect(() => {
+    function enfocarConAtajo(e){
+      if(e.altKey && e.key.toLowerCase() === "n"){ e.preventDefault() ; nombreInputRef.current.focus() ; }
+    }
+
+    window.addEventListener("keydown" , enfocarConAtajo ) ;
+
+    return () => {window.removeEventListener( "keydown" , enfocarConAtajo) ; } ;
+  } , []) ;
 
   function handleSubmit(e){
 
