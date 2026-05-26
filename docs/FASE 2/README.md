@@ -1,6 +1,6 @@
 # Forgotten Places
 
-## Fase 2 — useContext / useRef / Tema Visual
+## Fase 2 useContext / useRef / Tema Visual
 
 En esta fase continué haciendo cambios en **Forgotten Places Centro América**, que es un journal personal de viajes enfocado en lugares olvidados.
 
