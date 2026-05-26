@@ -1,7 +1,7 @@
 export const CATEGORIAS = [
-  { id: "ruinas", nombre: "Ruinas", color: "#8B5E3C" },
-  { id: "historico", nombre: "Histórico", color: "#6B7280" },
-  { id: "natural", nombre: "Natural escondido", color: "#2F855A" },
-  { id: "pueblo", nombre: "Pueblo olvidado", color: "#C08457" },
-  { id: "misterioso", nombre: "Misterioso", color: "#4C1D95" }
+  { id: "ruinas", nombre: "Ruinas", emoji: "🏛️" , color: "#8B5E3C" },
+  { id: "historico", nombre: "Histórico", emoji: "📜", color: "#3b8cb5" },
+  { id: "natural", nombre: "Natural escondido", emoji: "🌿", color: "#2F855A" },
+  { id: "pueblo", nombre: "Pueblo olvidado", emoji: "🏘️", color: "#aa5aa0" },
+  { id: "misterioso", nombre: "Misterioso", emoji: "🕯️", color: "#4C1D95" }
 ];

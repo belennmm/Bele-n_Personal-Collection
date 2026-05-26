@@ -4,6 +4,7 @@ import ListaItems from "./components/ListaItems" ;
 
 import { StorageContext } from "./context/StorageContext" ;
 import { ThemeContext } from "./context/ThemeContext" ;
+import JournalTimer from "./components/JournalTimer" ;
 
 
 
@@ -14,6 +15,22 @@ function App(){
   const { tema , toggleTema } = useContext(ThemeContext) ;
 
   const [items, setItems] = useState([]);
+  
+  useEffect(() => {
+
+      function cambiarTemaConAtajo(e){
+         
+        const escribiendo =["INPUT" , "TEXTAREA", "SELECT"].includes( e.target.tagName) ;
+
+        if(escribiendo ){ return ;}
+
+        if(e.key.toLowerCase( ) === "t" ){ toggleTema(); }
+      }
+
+      window.addEventListener("keydown" , cambiarTemaConAtajo) ;
+
+      return () => { window.removeEventListener( "keydown", cambiarTemaConAtajo) ;} ;
+  } , [toggleTema] ) ;
   
     useEffect(() => {
       async function cargarItems() {
@@ -58,6 +75,16 @@ function App(){
         setItems(listaUpdated);
       }
     }
+
+    async function editarItem(id , itemUpdated) {
+    const actualizado = await actualizarItem(id , itemUpdated) ;
+
+    if(actualizado){
+      const listaUpdated = items.map((item) => item.id === id ? { ...item , ...actualizado } : item ) ;
+
+      setItems(listaUpdated) ;
+    }
+  }
 
     const itemsqueActivos = items.filter((item) => item.activo) ;
 
@@ -115,6 +142,8 @@ function App(){
           Tema: {tema}
         </button>
       </div>
+
+      <JournalTimer />
             
       <section className="modoStorage mx-auto max-w-7xl px-6 pb-8 md:px-16">
         <div className="flex flex-wrap items-center justify-between gap-4 border border-[var(--color-acento)] px-5 py-4">
@@ -187,12 +216,14 @@ function App(){
             </div>
 
             <div className="archiveWritingPage border-l-0 border-[var(--color-acento)] md:border-l md:pl-14">
+              
               <ListaItems
                 items={itemsqueActivos}
                 onArchivarItem={archivarItem}
-                onCambiarEstadoItem={cambiarEstadoItem}
+                onEditarItem={editarItem}
               />
             </div>
+            
           </div>
         </div>
       </section>

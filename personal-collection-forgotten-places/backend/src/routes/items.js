@@ -36,6 +36,10 @@ router.post("/" , (req , res) => {
     return res.status(400).json({ error: "El estado es obligatorio" }) ;
   }
 
+  if(puntuacion !== null && (Number(puntuacion) < 1 || Number(puntuacion) > 5)){
+    return res.status(400).json({ error: "La puntuación debe estar entre 1 y 5 estrellas" }) ;
+  }
+
   try {
     const nuevoItem = {
       id: crypto.randomUUID() ,
@@ -78,6 +82,9 @@ router.put("/:id" , (req , res) => {
     if(!itemActual){
       return res.status(404).json({ error: "Item no encontrado" }) ;
     }
+    if(puntuacion !== null && (Number(puntuacion) < 1 || Number(puntuacion) > 5)){
+      return res.status(400).json({ error: "La puntuación debe estar entre 1 y 5 estrellas" }) ;
+    }
 
     const itemUpdated = {
       id: req.params.id ,
@@ -108,6 +115,8 @@ router.put("/:id" , (req , res) => {
       atributos
     }) ;
   }
+
+  
 
   catch(error) {
     res.status(500).json({ error: error.message }) ;
@@ -168,5 +177,7 @@ router.post("/:id/registro" , (req , res) => {
     res.status(500).json({ error: error.message }) ;
   }
 }) ;
+
+
 
 module.exports = router ;
