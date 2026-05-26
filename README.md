@@ -10,7 +10,7 @@ La idea de mi proyecto es crear un journal de viajes para travelers que disfruta
 - [Fase 2: useContext, useRef y tema visual](./docs/FASE%202/README.md)
 - [Fase 3: useReducer, gráficas y optimización](./docs/FASE%203/README.md)
 - [Fase 4: custom hooks, deploy y entrega final](./docs/FASE%204/README.md)
-- [Justificación del uso de Tailwind CSS y Anime.js](./docs/JUSTIFICACION%20HERRAMIENTAS/README.md)
+- [Justificación del uso de Tailwind CSS y Anime js](./docs/JUSTIFICACION%204HERRAMIENTAS/README.md)
 
 ## Tecnologías principales
 
