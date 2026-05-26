@@ -75,4 +75,6 @@ En cada entrada del archivo aparece un círculo con el color correspondiente a l
 - al volver a hacer clic el elemento regresa al círculo de color original
 
 Por ejemplo, un lugar clasificado como naturaleza escondida puede mostrar inicialmente un círculo verde y al interactuar con él revelar el emoji relacionado con esa categoría.
+
+
 ---
