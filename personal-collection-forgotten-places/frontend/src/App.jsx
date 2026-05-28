@@ -1,10 +1,11 @@
-import { useEffect, useContext, useState } from "react";
+import { useState, useEffect, useContext, useReducer } from "react";
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
 import { StorageContext } from "./context/StorageContext" ;
 import { ThemeContext } from "./context/ThemeContext" ;
 import JournalTimer from "./components/JournalTimer" ;
+import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
 
 
 
@@ -14,7 +15,9 @@ function App(){
   const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem } = useContext( StorageContext) ;
   const { tema , toggleTema } = useContext(ThemeContext) ;
 
-  const [items, setItems] = useState([]);
+  const [estadoItems ,dispatch ] = useReducer( itemsReducer , estadoInicialItems) ;
+
+  const items = estadoItems.lista;
   
   useEffect(() => {
 
@@ -35,7 +38,8 @@ function App(){
     useEffect(() => {
       async function cargarItems() {
         const data = await obtenerItems() ;
-        setItems(data) ;
+        
+        dispatch( { type : "HIDRATAR" ,  payload: data });
       }
       
       cargarItems() ;
@@ -43,46 +47,43 @@ function App(){
 
     async function agregarItem(newItem) {
       const itemGuardado = await guardarItem(newItem) ;
-      if(itemGuardado){
-        setItems([...items, itemGuardado]) ;
+      
+      if(itemGuardado){dispatch( { type : "AGREGAR",  payload: itemGuardado });
       }
     }
 
     async function archivarItem(id) {
       const exito = await eliminarItem(id) ;
-      if(exito){
-        const listaUpdated = items.map((item) =>
-          item.id ===  id ? { ...item , activo: false } : item
-        );
-        
-        setItems(listaUpdated);
+      if(exito){ dispatch({ type: "ELIMINAR", payload: id });
       }
     }
 
     async function cambiarEstadoItem(id, nuevoEstado) {
       const itemActual = items.find((item) => item.id === id) ;
-      if(!itemActual){ return ; }
 
-      const itemUpdated = { ...itemActual , estado: nuevoEstado , fechaActividad: new Date().toISOString() } ;
+      if(!itemActual){ return ;}
+
+      const fechaActividad = new Date().toISOString() ;
+      const itemUpdated = { ...itemActual , estado: nuevoEstado, fechaActividad };
 
       const actualizado = await actualizarItem(id , itemUpdated) ;
 
       if(actualizado){
-        const listaUpdated = items.map((item) =>
-          item.id === id ? { ...item, estado: nuevoEstado , fechaActividad: new Date().toISOString() } : item
-        );
-        
-        setItems(listaUpdated);
+        dispatch({
+          type: "CAMBIAR_ESTADO" ,
+          payload: { id , estado: nuevoEstado , fechaActividad }
+        }) ;
       }
     }
 
     async function editarItem(id , itemUpdated) {
     const actualizado = await actualizarItem(id , itemUpdated) ;
 
-    if(actualizado){
-      const listaUpdated = items.map((item) => item.id === id ? { ...item , ...actualizado } : item ) ;
-
-      setItems(listaUpdated) ;
+     if(actualizado){
+      dispatch({
+        type: "EDITAR" ,
+        payload: { id , itemUpdated: actualizado  }
+      }) ;
     }
   }
 
