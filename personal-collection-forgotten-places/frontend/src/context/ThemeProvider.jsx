@@ -1,26 +1,23 @@
-import { useState, useEffect } from "react" ;
-import { ThemeContext } from "./ThemeContext" ;
+import { useEffect } from "react";
+import { ThemeContext } from "./ThemeContext";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-function ThemeProvider({ children }){
 
-  const [tema , setTema ] = useState(() => {
-    return localStorage.getItem("tema") || "oscuro" ;
-  }) ;
+function ThemeProvider({ children }) {
+  const [tema , setTema] = useLocalStorage("tema" , "oscuro") ;
 
-  useEffect(() => {
-    document.body.setAttribute("data-theme" , tema) ;
-    localStorage.setItem("tema" , tema) ;
-  } , [tema]) ;
+  useEffect(() =>{ document.body.setAttribute("data-theme", tema ); } , [tema]) ;
 
   function toggleTema(){
-    setTema((temaActual) => temaActual === "oscuro" ? "claro" : "oscuro") ;
+    setTema((temaActual) => temaActual ===  "oscuro" ? "claro" : "oscuro");
   }
 
   return(
-    <ThemeContext.Provider value={{ tema , setTema , toggleTema }}>
-      {children}
+    <ThemeContext.Provider value={{tema , toggleTema } }>
+      { children}
+
     </ThemeContext.Provider>
-  ) ;
+  );
 }
 
-export default ThemeProvider ;
+export default ThemeProvider;
