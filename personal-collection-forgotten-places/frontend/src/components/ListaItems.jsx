@@ -3,7 +3,7 @@ import { CATEGORIAS } from "../utils/categorias";
 import { ESTADOS } from "../utils/estados";
 import ItemCard from "./ItemCard";
 
-function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda, onCambiarFiltroCategoria , onCambiarFiltroEstado, onCambiarBusqueda, onLimpiarFiltros, onArchivarItem , onEditarItem }) {
+function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda, onCambiarFiltroCategoria , onCambiarFiltroEstado, onCambiarBusqueda, onLimpiarFiltros, onArchivarItem , onEditarItem, onRegistrarActividad }) {
   const [paginaActual, setPaginaActual] = useState(0);
 
   useEffect(() => {
@@ -96,6 +96,7 @@ function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda
             item ={items[paginaActual] }
             onArchivarItem= {onArchivarItem }
             onEditarItem= { onEditarItem}
+            onRegistrarActividad={onRegistrarActividad}
           />
 
         </>

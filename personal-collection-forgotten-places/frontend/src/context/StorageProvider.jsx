@@ -159,17 +159,57 @@ function StorageProvider({ children }){
 
   } , [modo , API_URL]) ;
 
+  const registrarActividad = useCallback(async (itemId , registro , fechaActividad) => {
+    setCargando(true );
+    setError(null);
+
+    try {
+      if(modo === "api"){
+        
+        const res = await fetch(`${ API_URL}/api/items/${ itemId}/registro` ,{
+          method: "POST" ,
+          headers: { "Content-Type": "application/json" } ,
+          body: JSON.stringify(registro)
+        } );
+
+        if( !res.ok){ throw new Error(`HTTP ${res.status}`) ; }
+
+        return await res.json( );
+      }
+
+      const data = localStorage.getItem( "items");
+      const itemsActuales =  data ? JSON.parse(data) : [];
+
+      const nuevaLista = itemsActuales.map((item) =>
+        item.id === itemId ? {...item ,
+          fechaActividad ,
+          registros: [...( item.registros || [] ) , registro]
+        } : item
+      ) ;
+
+      localStorage.setItem( "items" , JSON.stringify(nuevaLista) );
+
+      return registro;
+    }
+
+    catch(errorActual){ setError(errorActual.message) ; return null ; }
+
+    finally { setCargando(false) ; }
+  } ,  [ modo , API_URL]) ;
+
   return(
+
     <StorageContext.Provider value={{
       modo ,
-      setModo ,
-      cargando ,
+      setModo,
+      cargando,
       error,
-      obtenerItems ,
+      obtenerItems,
       guardarItem ,
       actualizarItem,
-      eliminarItem
-    }}>
+      eliminarItem,
+      registrarActividad ,
+    }} >
       {children}
     </StorageContext.Provider>
   ) ;

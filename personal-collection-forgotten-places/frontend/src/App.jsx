@@ -12,7 +12,7 @@ import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
 
 function App(){
 
-  const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem } = useContext( StorageContext) ;
+  const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem, registrarActividad } = useContext( StorageContext) ;
   const { tema , toggleTema } = useContext(ThemeContext) ;
 
   const [estadoItems ,dispatch ] = useReducer( itemsReducer , estadoInicialItems) ;
@@ -92,6 +92,31 @@ function App(){
     }
 
     
+    async function registrarActividadItem(itemId , valor) {
+      const fechaActividad = new Date().toISOString() ;
+
+      const registro = {
+        id: crypto.randomUUID() ,
+        itemId ,
+        fecha: fechaActividad.split("T")[0] ,
+        valor ,
+        notas: valor === 1 ? "Recomendación registrada" : "Corrección de recomendación"
+      } ;
+
+      const registroGuardado = await registrarActividad(itemId , registro , fechaActividad) ;
+
+      if(registroGuardado){
+        dispatch({
+          type: "REGISTRAR_ACTIVIDAD" ,
+          payload: {
+            itemId ,
+            fechaActividad ,
+            registro: registroGuardado
+          }
+        }) ;
+      }
+    }
+    
     function cambiarFiltroCategoria(nuevaCategoria) {
       dispatch({ type: "FILTRAR" ,
         payload: { filtroCategoria: nuevaCategoria } }) ;
@@ -112,15 +137,17 @@ function App(){
     function limpiarFiltros() {dispatch({ type: "LIMPIAR_FILTROS" } ) ; }
 
 
-      const itemsqueActivos = items.filter((item ) => {
-        const coincideActivo =  item.activo;
-        const coincideCategoria  = filtroCategoria === "todas" || item.categoriaId === filtroCategoria;
-        const coincideEstado=  filtroEstado === "todos" || item.estado === filtroEstado ;
-        const textoBusqueda = busqueda.toLowerCase( ) ;
-        const coincideBusqueda  = item.nombre.toLowerCase().includes(textoBusqueda) || item.atributos?.pais?.toLowerCase( ).includes(textoBusqueda);
+    const itemsqueActivos = items.filter((item ) => {
+    const coincideActivo =  item.activo;
+    const coincideCategoria  = filtroCategoria === "todas" || item.categoriaId === filtroCategoria;
+    const coincideEstado=  filtroEstado === "todos" || item.estado === filtroEstado ;
+    const textoBusqueda = busqueda.toLowerCase( ) ;
+    const coincideBusqueda  = item.nombre.toLowerCase().includes(textoBusqueda) || item.atributos?.pais?.toLowerCase( ).includes(textoBusqueda);
 
         return coincideActivo && coincideCategoria && coincideEstado && coincideBusqueda ;
       }) ;
+
+    
 
    return (
     <main className="min-h-screen bg-[var(--color-fondo)] text-[var(--color-texto)]">
@@ -260,9 +287,10 @@ function App(){
                 onCambiarFiltroCategoria = { cambiarFiltroCategoria}
                 onCambiarFiltroEstado = { cambiarFiltroEstado}
                 onCambiarBusqueda= { cambiarBusqueda }
-                onLimpiarFiltros={ limpiarFiltros}
+                onLimpiarFiltros={limpiarFiltros}
                 onArchivarItem={ archivarItem}
                 onEditarItem= { editarItem}
+                onRegistrarActividad={registrarActividadItem}
               />
             </div>
             
