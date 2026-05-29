@@ -6,6 +6,7 @@ import { StorageContext } from "./context/StorageContext" ;
 import { ThemeContext } from "./context/ThemeContext" ;
 import JournalTimer from "./components/JournalTimer" ;
 import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
+import EstadisticasJournal from "./components/EstadisticasJournal" ;
 
 
 
@@ -260,7 +261,7 @@ function App(){
         </div>
       </section>
 
-                        <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
+          <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
               <div className="bg-[var(--color-pagina)] px-8 py-14 text-[var(--color-texto-pagina)] md:px-12">
           <div className="grid gap-14 md:grid-cols-[0.65fr_1.35fr]">
             <div className="archiveIntro md:sticky md:top-10 md:self-start">
@@ -297,6 +298,7 @@ function App(){
           </div>
         </div>
       </section>
+            <EstadisticasJournal items={itemsqueActivos} />
     </main>
   );
 
