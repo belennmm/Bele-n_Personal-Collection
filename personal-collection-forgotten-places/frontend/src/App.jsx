@@ -18,6 +18,10 @@ function App(){
   const [estadoItems ,dispatch ] = useReducer( itemsReducer , estadoInicialItems) ;
 
   const items = estadoItems.lista;
+
+  const filtroCategoria = estadoItems.filtroCategoria ;
+  const filtroEstado = estadoItems.filtroEstado;
+  const  busqueda = estadoItems.busqueda;
   
   useEffect(() => {
 
@@ -77,17 +81,46 @@ function App(){
     }
 
     async function editarItem(id , itemUpdated) {
-    const actualizado = await actualizarItem(id , itemUpdated) ;
+      const actualizado = await actualizarItem(id , itemUpdated) ;
 
-     if(actualizado){
-      dispatch({
-        type: "EDITAR" ,
-        payload: { id , itemUpdated: actualizado  }
-      }) ;
+      if(actualizado ){
+        dispatch({
+          type : "EDITAR",
+          payload: { id , itemUpdated: actualizado  }
+        });
+      }
     }
-  }
 
-    const itemsqueActivos = items.filter((item) => item.activo) ;
+    
+    function cambiarFiltroCategoria(nuevaCategoria) {
+      dispatch({ type: "FILTRAR" ,
+        payload: { filtroCategoria: nuevaCategoria } }) ;
+    }
+
+    function cambiarFiltroEstado(nuevoEstado) {
+      dispatch({
+        type: "FILTRAR" , payload: {  filtroEstado: nuevoEstado } } );
+    }
+
+    function cambiarBusqueda(nuevaBusqueda) {
+      dispatch({
+        type: "FILTRAR" ,
+        payload: { busqueda: nuevaBusqueda }
+      } );
+    }
+
+    function limpiarFiltros() {dispatch({ type: "LIMPIAR_FILTROS" } ) ; }
+
+
+      const itemsqueActivos = items.filter((item ) => {
+        const coincideActivo =  item.activo;
+        const coincideCategoria  = filtroCategoria === "todas" || item.categoriaId === filtroCategoria;
+        const coincideEstado=  filtroEstado === "todos" || item.estado === filtroEstado ;
+        const textoBusqueda = busqueda.toLowerCase( ) ;
+        const coincideBusqueda  = item.nombre.toLowerCase().includes(textoBusqueda) || item.atributos?.pais?.toLowerCase( ).includes(textoBusqueda);
+
+        return coincideActivo && coincideCategoria && coincideEstado && coincideBusqueda ;
+      }) ;
 
    return (
     <main className="min-h-screen bg-[var(--color-fondo)] text-[var(--color-texto)]">
@@ -219,9 +252,17 @@ function App(){
             <div className="archiveWritingPage border-l-0 border-[var(--color-acento)] md:border-l md:pl-14">
               
               <ListaItems
-                items={itemsqueActivos}
-                onArchivarItem={archivarItem}
-                onEditarItem={editarItem}
+                items={ itemsqueActivos }
+                totalItems={ items.filter((item ) => item.activo ).length}
+                filtroCategoria= { filtroCategoria }
+                filtroEstado={ filtroEstado}
+                busqueda={busqueda }
+                onCambiarFiltroCategoria = { cambiarFiltroCategoria}
+                onCambiarFiltroEstado = { cambiarFiltroEstado}
+                onCambiarBusqueda= { cambiarBusqueda }
+                onLimpiarFiltros={ limpiarFiltros}
+                onArchivarItem={ archivarItem}
+                onEditarItem= { editarItem}
               />
             </div>
             
