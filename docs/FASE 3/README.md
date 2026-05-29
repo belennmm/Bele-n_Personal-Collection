@@ -1,6 +1,6 @@
 # Forgotten Places
 
-## Fase 3 — Reducer · Gráficas · Optimización
+## Fase 3  Reducer  Gráficas  Optimización
 
 En esta fase continué con reemplazar el estado disperso por el  `useReducer`, agregar unas visualizaciones con Recharts y poder optimizar el rendimiento de la aplicación usando `useMemo`, `useCallback` y `React.memo`.
 
