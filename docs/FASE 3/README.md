@@ -2,13 +2,12 @@
 
 ## Fase 3 — Reducer · Gráficas · Optimización
 
-En esta fase continué el desarrollo de **Forgotten Places Centro América**, mi journal personal de viajes enfocado en registrar lugares olvidados, escondidos o poco conocidos de Centroamérica.
+En esta fase continué con reemplazar el estado disperso por el  `useReducer`, agregar unas visualizaciones con Recharts y poder optimizar el rendimiento de la aplicación usando `useMemo`, `useCallback` y `React.memo`.
 
-El objetivo principal fue reemplazar el estado disperso por un `useReducer`, agregar visualizaciones con Recharts y optimizar el rendimiento de la aplicación usando `useMemo`, `useCallback` y `React.memo`.
+También mantuve la idea visual de revista digital, por esto lás gráficas están en un apartado nuevo de **Travel Insights**, como una nueva página 
 
-También mantuve la idea visual de revista digital que venía trabajando en las fases anteriores, por lo que las gráficas fueron colocadas en una sección separada llamada **Travel Insights**, como si fuera una página especial de análisis dentro del journal.
 
-[Video FASE 3 PREVIEW](https://canva.link/68wm09o7i3t5rbo)
+[Video FASE 3 PREVIEW](https://canva.link/r10klhpd7kp0tea)
 
 ---
 
@@ -31,20 +30,10 @@ En esta fase implementé:
 
 ## 2. Implementación de useReducer
 
-En esta fase reemplacé parte del estado disperso de la aplicación por un reducer centralizado.
+Reemplacé parte del estado disperso como lo pedía. 
 
-El estado principal del reducer quedó organizado así:
 
-```js
-{
-  lista: [] ,
-  filtroCategoria: "todas" ,
-  filtroEstado: "todos" ,
-  busqueda: ""
-}
-```
-
-Esto me permitió manejar desde un solo lugar la lista de lugares, los filtros activos y la búsqueda del archivo.
+Ahora tengo en un solo lugar la lista de lugares, los filtros activos y la búsqueda del archivo.
 
 ### Acciones implementadas
 
@@ -53,50 +42,38 @@ Esto me permitió manejar desde un solo lugar la lista de lugares, los filtros a
 | `HIDRATAR`            | Carga los lugares obtenidos desde LocalStorage o desde la API. |
 | `AGREGAR`             | Agrega un nuevo lugar a la colección.                          |
 | `ELIMINAR`            | Archiva un lugar cambiando su estado activo a `false`.         |
-| `CAMBIAR_ESTADO`      | Actualiza el estado de exploración de un lugar.                |
+| `CAMBIAR_ESTADO`      | Actualiza el estado de exploración de un lugar                 |
 | `FILTRAR`             | Actualiza los filtros de categoría, estado o búsqueda.         |
-| `LIMPIAR_FILTROS`     | Reinicia los filtros a sus valores iniciales.                  |
+| `LIMPIAR_FILTROS`     | Reinicia los filtros, quita los cambios de los filtros         |
 | `REGISTRAR_ACTIVIDAD` | Registra una recomendación o corrección de recomendación.      |
 | `EDITAR`              | Actualiza completamente los datos de una entrada existente.    |
 
-Agregué la acción `EDITAR` porque mi journal permite modificar toda la información de un lugar guardado. Aunque no era parte de las acciones mínimas, era necesaria para conservar la funcionalidad que ya había construido en fases anteriores.
 
 ---
 
 ## 3. Reducer puro
 
-El archivo `itemsReducer.js` fue construido como una función pura.
 
-Esto significa que dentro del reducer no utilicé:
-
-* `fetch`
-* `localStorage`
-* `Date.now()`
-* `new Date()`
-* mutaciones directas del estado
-
-Las fechas y los datos externos se preparan fuera del reducer y luego se envían mediante el `payload` de cada acción.
-
-Por ejemplo, para registrar una recomendación, la fecha se crea en `App.jsx` y el reducer solamente actualiza la lista con los datos que recibe.
+Para registrar una recomendación, la fecha se crea en App.jsx y el reducer solamente actualiza la lista con los datos que recibe.
 
 ---
 
 ## 4. Filtros combinados
 
-Implementé filtros combinados en tiempo real dentro del archivo de lugares.
-
-Los filtros permiten buscar por:
+Los filtros que ahora existen sirveb para buscar por:
 
 * categoría
 * estado de exploración
 * nombre del lugar
 * país
 
-También agregué un botón de **Limpiar filtros**, que reinicia los filtros activos y vuelve a mostrar todos los lugares disponibles.
+También agregué el botón de **Limpiar filtros**, que reinicia los filtros activos y regresa para mostrar todos. 
 
 Las gráficas también reaccionan a estos filtros, por lo que si selecciono una categoría o escribo una búsqueda, las visualizaciones cambian según los lugares visibles en ese momento.
 
+
 ---
+
 
 ## 5. Registro de actividad adaptado a recomendaciones
 
@@ -134,7 +111,10 @@ valor: -1
 
 Esto me permitió utilizar esos registros como base para las gráficas de la fase.
 
+
+
 ---
+
 
 ## 6. Animación de recomendaciones
 
@@ -144,13 +124,18 @@ Cuando se presiona el botón **+ Recomendar**, aparece un avión que recorre una
 
 Esta animación no cambia la lógica de los datos, solamente mejora la experiencia visual y conecta mejor la interacción con la idea de compartir o recomendar un destino.
 
+
+
 ---
 
 ## 7. Gráficas implementadas con Recharts
 
-Agregué una sección separada llamada **Travel Insights**, donde se muestran las estadísticas del journal.
+Agregué la sección separada llamada **Travel Insights**, donde se muestran las estadísticas del journal.
 
 Esta sección funciona como una página especial dentro de la revista, separada del formulario y del archivo de lugares.
+
+![Gráficas en modo Local](../assets/FASE3_grafica_local.png)
+![Gráficas en modo API](../assets/FASE3_grafica_api.png)
 
 ### Gráfica 1 — Movimiento de recomendaciones
 
@@ -158,7 +143,7 @@ La primera gráfica muestra las recomendaciones agregadas y correcciones realiza
 
 Utilicé una gráfica de barras porque permite comparar fácilmente la actividad diaria.
 
-![Profiler antes 1](./profiler_antes_1.png)
+![Profiler antes 1](../assets/profiler_antes_1.png)
 
 ### Gráfica 2 — Distribución de lugares por categoría
 
@@ -166,7 +151,7 @@ La segunda gráfica muestra cómo se distribuyen los lugares guardados según su
 
 Utilicé una gráfica circular porque permite ver de forma visual qué tipo de lugares predominan dentro de la colección.
 
-![Profiler antes 2](./profiler_antes_2.png)
+![Profiler antes 2](../assets/profiler_antes_2.png)
 
 ### Gráfica 3 — Lugares más recomendados
 
@@ -176,7 +161,7 @@ Muestra cuáles son los lugares más recomendados dentro de mi colección person
 
 La elegí porque se relaciona directamente con la temática del proyecto. En lugar de usar una gráfica genérica, quise que esta visualización saliera de una interacción propia del journal. Así puedo identificar qué destinos considero más interesantes o valiosos para recomendar a otras personas.
 
-![Profiler antes 3](./profiler_antes_3.png)
+![Profiler antes 3](../assets/profiler_antes_3.png)
 
 ---
 
@@ -253,15 +238,15 @@ Entre ellos se podían observar:
 * `EstadisticasJournal`
 * gráficas de Recharts
 
-![Profiler antes 1](./profiler_antes_1.png)
+![Profiler antes 1](../assets/profiler_antes_1.png)
 
-![Profiler antes 2](./profiler_antes_2.png)
+![Profiler antes 2](../assets/profiler_antes_2.png)
 
-![Profiler antes 3](./profiler_antes_3.png)
+![Profiler antes 3](../assets/profiler_antes_3.png)
 
-![Profiler antes 4](./profiler_antes_4.png)
+![Profiler antes 4](../assets/profiler_antes_4.png)
 
-![Profiler antes 5](./profiler_antes_5.png)
+![Profiler antes 5](../assets/profiler_antes_5.png)
 
 ### Después de la optimización
 
@@ -275,23 +260,26 @@ En las capturas posteriores, los componentes principales que aparecen son:
 
 Además, se observa que la actualización fue causada principalmente por `JournalTimer`, sin arrastrar de la misma forma a las gráficas completas.
 
-![Profiler después 1](./profiler_despues_1.png)
 
-![Profiler después 2](./profiler_despues_2.png)
 
-![Profiler después 3](./profiler_despues_3.png)
+![Profiler después 1](../assets/profiler_despues_1.png)
 
-![Profiler después 4](./profiler_despues_4.png)
+![Profiler después 2](../assets/profiler_despues_2.png)
 
-Esta comparación me permitió comprobar que la memoización ayudó a reducir renders innecesarios y a separar mejor las actualizaciones de componentes.
+![Profiler después 3](../assets/profiler_despues_3.png)
+
+![Profiler después 4](../assets/profiler_despues_4.png)
+
+
+
 
 ---
 
 ## 13. Mis 3 decisiones técnicas
 
+
 ### 13.1 Estructura del reducer
 
-Decidí centralizar el estado principal de los items en un reducer porque la aplicación ya tenía varias acciones relacionadas con la colección.
 
 Con el reducer pude manejar desde un solo lugar:
 
@@ -307,13 +295,15 @@ Esto hizo que la lógica estuviera más ordenada y que las acciones fueran más 
 
 ### 13.2 Acción más difícil
 
-La acción más difícil fue `REGISTRAR_ACTIVIDAD`.
+
+La acción más difícil fue `REGISTRAR_ACTIVIDAD`
 
 Al inicio no tenía claro qué significaría registrar actividad dentro de un journal de viajes. Pensé en usar una bitácora, pero sentí que se parecía demasiado a las notas personales que ya existían.
 
 Por eso decidí convertir esa actividad en recomendaciones de viaje.
 
 Esta decisión hizo que la acción tuviera más sentido dentro del proyecto y además me permitió usar esos datos para las gráficas.
+
 
 ### 13.3 Gráfica más compleja
 
@@ -345,22 +335,3 @@ Implementé una animación en la sección de recomendaciones de cada lugar. Cuan
 
 Esta animación fue utilizada para reforzar visualmente la idea de recomendar y compartir un destino dentro del journal de viajes.
 
----
-
-## 15. Tecnologías utilizadas en la fase
-
-* React
-* Vite
-* useReducer
-* useMemo
-* useCallback
-* React.memo
-* Recharts
-* Anime.js
-* Context API
-* LocalStorage
-* Fetch API
-* Express
-* SQLite
-* React DevTools Profiler
-* Git y GitHub
