@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useReducer } from "react";
+import { useState, useEffect, useContext, useReducer, useMemo, useCallback } from "react";
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
@@ -50,20 +50,21 @@ function App(){
       cargarItems() ;
     } , [obtenerItems, modo]) ;
 
-    async function agregarItem(newItem) {
+    const agregarItem = useCallback(async (newItem) => {
       const itemGuardado = await guardarItem(newItem) ;
       
       if(itemGuardado){dispatch( { type : "AGREGAR",  payload: itemGuardado });
       }
-    }
+    } , [guardarItem]) ;
 
-    async function archivarItem(id) {
+    
+    const archivarItem = useCallback(async (id) => {
       const exito = await eliminarItem(id) ;
       if(exito){ dispatch({ type: "ELIMINAR", payload: id });
       }
-    }
+    } , [eliminarItem]) ;
 
-    async function cambiarEstadoItem(id, nuevoEstado) {
+    const cambiarEstadoItem = useCallback(async (id, nuevoEstado) => {
       const itemActual = items.find((item) => item.id === id) ;
 
       if(!itemActual){ return ;}
@@ -79,9 +80,9 @@ function App(){
           payload: { id , estado: nuevoEstado , fechaActividad }
         }) ;
       }
-    }
+    } , [items , actualizarItem]) ;
 
-    async function editarItem(id , itemUpdated) {
+    const editarItem = useCallback(async (id , itemUpdated) => {
       const actualizado = await actualizarItem(id , itemUpdated) ;
 
       if(actualizado ){
@@ -90,10 +91,10 @@ function App(){
           payload: { id , itemUpdated: actualizado  }
         });
       }
-    }
+    } , [actualizarItem]) ;
 
     
-    async function registrarActividadItem(itemId , valor) {
+    const registrarActividadItem = useCallback(async (itemId , valor) => {
       const fechaActividad = new Date().toISOString() ;
 
       const registro = {
@@ -116,29 +117,29 @@ function App(){
           }
         }) ;
       }
-    }
+    } , [registrarActividad]) ;
     
-    function cambiarFiltroCategoria(nuevaCategoria) {
+    const cambiarFiltroCategoria = useCallback((nuevaCategoria) => {
       dispatch({ type: "FILTRAR" ,
         payload: { filtroCategoria: nuevaCategoria } }) ;
-    }
+    } , []) ;
 
-    function cambiarFiltroEstado(nuevoEstado) {
+    const cambiarFiltroEstado = useCallback((nuevoEstado) => {
       dispatch({
         type: "FILTRAR" , payload: {  filtroEstado: nuevoEstado } } );
-    }
+    } , []) ;
 
-    function cambiarBusqueda(nuevaBusqueda) {
+    const cambiarBusqueda = useCallback((nuevaBusqueda) => {
       dispatch({
         type: "FILTRAR" ,
         payload: { busqueda: nuevaBusqueda }
       } );
-    }
+    } , []) ;
 
-    function limpiarFiltros() {dispatch({ type: "LIMPIAR_FILTROS" } ) ; }
+    const limpiarFiltros = useCallback(() => {dispatch({ type: "LIMPIAR_FILTROS" } ) ; } , []) ;
 
 
-    const itemsqueActivos = items.filter((item ) => {
+    const itemsqueActivos = useMemo(() => items.filter((item ) => {
     const coincideActivo =  item.activo;
     const coincideCategoria  = filtroCategoria === "todas" || item.categoriaId === filtroCategoria;
     const coincideEstado=  filtroEstado === "todos" || item.estado === filtroEstado ;
@@ -146,7 +147,9 @@ function App(){
     const coincideBusqueda  = item.nombre.toLowerCase().includes(textoBusqueda) || item.atributos?.pais?.toLowerCase( ).includes(textoBusqueda);
 
         return coincideActivo && coincideCategoria && coincideEstado && coincideBusqueda ;
-      }) ;
+      }) , [items , filtroCategoria , filtroEstado , busqueda]) ;
+
+    const totalItemsActivos = useMemo(() => items.filter((item) => item.activo).length , [items]) ;
 
     
 
@@ -281,7 +284,7 @@ function App(){
               
               <ListaItems
                 items={ itemsqueActivos }
-                totalItems={ items.filter((item ) => item.activo ).length}
+                totalItems={totalItemsActivos}
                 filtroCategoria= { filtroCategoria }
                 filtroEstado={ filtroEstado}
                 busqueda={busqueda }

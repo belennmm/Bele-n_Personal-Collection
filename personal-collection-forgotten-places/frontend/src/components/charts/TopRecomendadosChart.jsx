@@ -1,9 +1,10 @@
+import { useMemo, memo } from "react" ;
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts" ;
 
 
 function TopRecomendadosChart({ items }){
 
-  const datosRecomendaciones = items.map((item) => {
+  const datosRecomendaciones = useMemo(() => items.map((item) => {
     const totalRecomendaciones = (item.registros || []).reduce((total , registro) =>
       total + Number(registro.valor)
     , 0) ;
@@ -12,7 +13,7 @@ function TopRecomendadosChart({ items }){
       nombre: item.nombre ,
       recomendaciones: totalRecomendaciones < 0 ? 0 : totalRecomendaciones
     } ;
-  }).sort((a , b) => b.recomendaciones - a.recomendaciones).slice(0 , 5) ;
+  }).sort((a , b) => b.recomendaciones - a.recomendaciones).slice(0 , 5) , [items]) ;
 
   return(
     <article className="chartPage border border-[var(--color-acento)] p-6">
@@ -44,4 +45,4 @@ function TopRecomendadosChart({ items }){
   ) ;
 }
 
-export default TopRecomendadosChart ;
+export default memo(TopRecomendadosChart) ;

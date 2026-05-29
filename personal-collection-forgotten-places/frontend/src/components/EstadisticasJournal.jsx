@@ -1,3 +1,4 @@
+import { memo } from "react" ;
 import ActividadSemanaChart from "./charts/ActividadSemanaChart" ;
 import CategoriasChart from "./charts/CategoriasChart" ;
 import TopRecomendadosChart from "./charts/TopRecomendadosChart" ;
@@ -44,4 +45,4 @@ function EstadisticasJournal({ items }){
   ) ;
 }
 
-export default EstadisticasJournal ;
+export default memo(EstadisticasJournal) ;

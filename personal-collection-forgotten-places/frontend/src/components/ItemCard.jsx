@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef , memo} from "react";
 import { animate } from "animejs";
 import { CATEGORIAS } from "../utils/categorias";
 import { ESTADOS } from "../utils/estados";
@@ -358,4 +358,4 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
   );
 }
 
-export default ItemCard;
+export default memo(ItemCard);

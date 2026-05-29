@@ -1,10 +1,11 @@
+import { useMemo, memo } from "react" ;
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts" ;
 import { CATEGORIAS } from "../../utils/categorias" ;
 
 
 function CategoriasChart({ items }){
 
-  const datosCategorias = CATEGORIAS.map((categoria) => {
+  const datosCategorias = useMemo(() => CATEGORIAS.map((categoria) => {
     const cantidad = items.filter((item) => item.categoriaId === categoria.id).length ;
 
     return {
@@ -12,7 +13,7 @@ function CategoriasChart({ items }){
       cantidad ,
       color: categoria.color
     } ;
-  }).filter((categoria) => categoria.cantidad > 0) ;
+  }).filter((categoria) => categoria.cantidad > 0) , [items]) ;
 
   return(
     <article className="chartPage border border-[var(--color-acento)] p-6">
@@ -46,4 +47,4 @@ function CategoriasChart({ items }){
   ) ;
 }
 
-export default CategoriasChart ;
+export default memo(CategoriasChart) ;

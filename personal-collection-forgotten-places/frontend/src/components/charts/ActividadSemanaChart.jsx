@@ -1,9 +1,9 @@
+import { useMemo, memo } from "react" ;
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts" ;
-
 
 function ActividadSemanaChart({ items }){
 
-  const datosSemana = Array.from({ length: 7 } , (_ , indice) => {
+    const datosSemana = useMemo(() => Array.from({ length: 7 } , (_ , indice) => {
     const fecha = new Date() ;
     fecha.setDate(fecha.getDate() - (6 - indice)) ;
 
@@ -30,7 +30,7 @@ function ActividadSemanaChart({ items }){
       recomendaciones ,
       correcciones
     } ;
-  }) ;
+  }) , [items]) ;
 
   return(
     <article className="chartPage border border-[var(--color-acento)] p-6">
@@ -57,4 +57,4 @@ function ActividadSemanaChart({ items }){
   ) ;
 }
 
-export default ActividadSemanaChart ;
+export default memo(ActividadSemanaChart) ;
