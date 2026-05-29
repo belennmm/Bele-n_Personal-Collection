@@ -145,19 +145,17 @@ router.delete("/:id" , (req , res) => {
   }
 }) ;
 
+
 router.post("/:id/registro" , (req , res) => {
-
-  if( valor === undefined || valor === null){
-
-    return res.status(400).json({ error: " El valor del registro es obligatorio" });
-  }
-
-  if(Number(valor) !== 1 && Number(valor) !== -1){ return res.status(400).json( {error: "El valor del registro debe ser 1 o -1" } ); }
 
   const { fecha , valor , notas = "" } = req.body ;
 
   if(valor === undefined || valor === null){
     return res.status(400).json({ error: "El valor del registro es obligatorio" }) ;
+  }
+
+  if(Number(valor) !== 1 && Number(valor) !== -1){
+    return res.status(400).json({ error: "El valor del registro debe ser 1 o -1" }) ;
   }
 
   try {
@@ -171,7 +169,7 @@ router.post("/:id/registro" , (req , res) => {
       id: crypto.randomUUID() ,
       itemId: req.params.id ,
       fecha: fecha || new Date().toISOString().split("T")[0] ,
-      valor ,
+       valor: Number(valor) ,
       notas
     } ;
 

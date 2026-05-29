@@ -48,10 +48,11 @@ export function itemsReducer(estado , accion){
     case "REGISTRAR_ACTIVIDAD":
       return {
         ...estado ,
-        lista: estado.lista.map((item) => item.id === accion.payload.itemId ? {
+        lista: estado.lista.map((item) =>
+          item.id === accion.payload.itemId ? {
             ...item ,
             fechaActividad: accion.payload.fechaActividad ,
-            registros: [...(item.registros || []  ), accion.payload.registro ]
+            registros: [...(item.registros || []) , accion.payload.registro]
           } : item
         )
       } ;

@@ -5,7 +5,7 @@ import { ESTADOS } from "../utils/estados";
 
 function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) {
   const categoria = CATEGORIAS.find((cat) => cat.id === item.categoriaId);
-  const totalRecomendaciones = item.registros?.reduce((total , registro) => total + Number(registro.valor) , 0) || 0 ;
+    const totalRecomendaciones = item.registros?.reduce((total , registro) => total + Number(registro.valor) , 0) || 0 ;
 
   
   const [mostrarEmoji, setMostrarEmoji] = useState(false);
