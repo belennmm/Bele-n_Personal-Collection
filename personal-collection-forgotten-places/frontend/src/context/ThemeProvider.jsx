@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { ThemeContext } from "./ThemeContext";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -20,4 +21,4 @@ function ThemeProvider({ children }) {
   );
 }
 
-export default ThemeProvider;
+export default ThemeProvider ;
