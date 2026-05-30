@@ -1,20 +1,28 @@
-import { useEffect, useContext, useState } from "react";
+import { useState, useEffect, useContext, useReducer, useMemo, useCallback } from "react";
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
 import { StorageContext } from "./context/StorageContext" ;
 import { ThemeContext } from "./context/ThemeContext" ;
 import JournalTimer from "./components/JournalTimer" ;
+import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
+import EstadisticasJournal from "./components/EstadisticasJournal" ;
 
 
 
 
 function App(){
 
-  const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem } = useContext( StorageContext) ;
+  const { modo , setModo, cargando , error, obtenerItems, guardarItem, actualizarItem , eliminarItem, registrarActividad } = useContext( StorageContext) ;
   const { tema , toggleTema } = useContext(ThemeContext) ;
 
-  const [items, setItems] = useState([]);
+  const [estadoItems ,dispatch ] = useReducer( itemsReducer , estadoInicialItems) ;
+
+  const items = estadoItems.lista;
+
+  const filtroCategoria = estadoItems.filtroCategoria ;
+  const filtroEstado = estadoItems.filtroEstado;
+  const  busqueda = estadoItems.busqueda;
   
   useEffect(() => {
 
@@ -35,58 +43,115 @@ function App(){
     useEffect(() => {
       async function cargarItems() {
         const data = await obtenerItems() ;
-        setItems(data) ;
+        
+        dispatch( { type : "HIDRATAR" ,  payload: data });
       }
       
       cargarItems() ;
     } , [obtenerItems, modo]) ;
 
-    async function agregarItem(newItem) {
+    const agregarItem = useCallback(async (newItem) => {
       const itemGuardado = await guardarItem(newItem) ;
-      if(itemGuardado){
-        setItems([...items, itemGuardado]) ;
+      
+      if(itemGuardado){dispatch( { type : "AGREGAR",  payload: itemGuardado });
       }
-    }
+    } , [guardarItem]) ;
 
-    async function archivarItem(id) {
+    
+    const archivarItem = useCallback(async (id) => {
       const exito = await eliminarItem(id) ;
-      if(exito){
-        const listaUpdated = items.map((item) =>
-          item.id ===  id ? { ...item , activo: false } : item
-        );
-        
-        setItems(listaUpdated);
+      if(exito){ dispatch({ type: "ELIMINAR", payload: id });
       }
-    }
+    } , [eliminarItem]) ;
 
-    async function cambiarEstadoItem(id, nuevoEstado) {
+    const cambiarEstadoItem = useCallback(async (id, nuevoEstado) => {
       const itemActual = items.find((item) => item.id === id) ;
-      if(!itemActual){ return ; }
 
-      const itemUpdated = { ...itemActual , estado: nuevoEstado , fechaActividad: new Date().toISOString() } ;
+      if(!itemActual){ return ;}
+
+      const fechaActividad = new Date().toISOString() ;
+      const itemUpdated = { ...itemActual , estado: nuevoEstado, fechaActividad };
 
       const actualizado = await actualizarItem(id , itemUpdated) ;
 
       if(actualizado){
-        const listaUpdated = items.map((item) =>
-          item.id === id ? { ...item, estado: nuevoEstado , fechaActividad: new Date().toISOString() } : item
-        );
-        
-        setItems(listaUpdated);
+        dispatch({
+          type: "CAMBIAR_ESTADO" ,
+          payload: { id , estado: nuevoEstado , fechaActividad }
+        }) ;
       }
-    }
+    } , [items , actualizarItem]) ;
 
-    async function editarItem(id , itemUpdated) {
-    const actualizado = await actualizarItem(id , itemUpdated) ;
+    const editarItem = useCallback(async (id , itemUpdated) => {
+      const actualizado = await actualizarItem(id , itemUpdated) ;
 
-    if(actualizado){
-      const listaUpdated = items.map((item) => item.id === id ? { ...item , ...actualizado } : item ) ;
+      if(actualizado ){
+        dispatch({
+          type : "EDITAR",
+          payload: { id , itemUpdated: actualizado  }
+        });
+      }
+    } , [actualizarItem]) ;
 
-      setItems(listaUpdated) ;
-    }
-  }
+    
+    const registrarActividadItem = useCallback(async (itemId , valor) => {
+      const fechaActividad = new Date().toISOString() ;
 
-    const itemsqueActivos = items.filter((item) => item.activo) ;
+      const registro = {
+        id: crypto.randomUUID() ,
+        itemId ,
+        fecha: fechaActividad.split("T")[0] ,
+        valor ,
+        notas: valor === 1 ? "Recomendación registrada" : "Corrección de recomendación"
+      } ;
+
+      const registroGuardado = await registrarActividad(itemId , registro , fechaActividad) ;
+
+      if(registroGuardado){
+        dispatch({
+          type: "REGISTRAR_ACTIVIDAD" ,
+          payload: {
+            itemId ,
+            fechaActividad ,
+            registro: registroGuardado
+          }
+        }) ;
+      }
+    } , [registrarActividad]) ;
+    
+    const cambiarFiltroCategoria = useCallback((nuevaCategoria) => {
+      dispatch({ type: "FILTRAR" ,
+        payload: { filtroCategoria: nuevaCategoria } }) ;
+    } , []) ;
+
+    const cambiarFiltroEstado = useCallback((nuevoEstado) => {
+      dispatch({
+        type: "FILTRAR" , payload: {  filtroEstado: nuevoEstado } } );
+    } , []) ;
+
+    const cambiarBusqueda = useCallback((nuevaBusqueda) => {
+      dispatch({
+        type: "FILTRAR" ,
+        payload: { busqueda: nuevaBusqueda }
+      } );
+    } , []) ;
+
+    const limpiarFiltros = useCallback(() => {dispatch({ type: "LIMPIAR_FILTROS" } ) ; } , []) ;
+
+
+    const itemsqueActivos = useMemo(() => items.filter((item ) => {
+    const coincideActivo =  item.activo;
+    const coincideCategoria  = filtroCategoria === "todas" || item.categoriaId === filtroCategoria;
+    const coincideEstado=  filtroEstado === "todos" || item.estado === filtroEstado ;
+    const textoBusqueda = busqueda.toLowerCase( ) ;
+    const coincideBusqueda  = item.nombre.toLowerCase().includes(textoBusqueda) || item.atributos?.pais?.toLowerCase( ).includes(textoBusqueda);
+
+        return coincideActivo && coincideCategoria && coincideEstado && coincideBusqueda ;
+      }) , [items , filtroCategoria , filtroEstado , busqueda]) ;
+
+    const totalItemsActivos = useMemo(() => items.filter((item) => item.activo).length , [items]) ;
+
+    
 
    return (
     <main className="min-h-screen bg-[var(--color-fondo)] text-[var(--color-texto)]">
@@ -199,7 +264,7 @@ function App(){
         </div>
       </section>
 
-                        <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
+          <section className="archivePage mx-auto max-w-7xl px-6 pb-20 md:px-16">
               <div className="bg-[var(--color-pagina)] px-8 py-14 text-[var(--color-texto-pagina)] md:px-12">
           <div className="grid gap-14 md:grid-cols-[0.65fr_1.35fr]">
             <div className="archiveIntro md:sticky md:top-10 md:self-start">
@@ -218,15 +283,25 @@ function App(){
             <div className="archiveWritingPage border-l-0 border-[var(--color-acento)] md:border-l md:pl-14">
               
               <ListaItems
-                items={itemsqueActivos}
-                onArchivarItem={archivarItem}
-                onEditarItem={editarItem}
+                items={ itemsqueActivos }
+                totalItems={totalItemsActivos}
+                filtroCategoria= { filtroCategoria }
+                filtroEstado={ filtroEstado}
+                busqueda={busqueda }
+                onCambiarFiltroCategoria = { cambiarFiltroCategoria}
+                onCambiarFiltroEstado = { cambiarFiltroEstado}
+                onCambiarBusqueda= { cambiarBusqueda }
+                onLimpiarFiltros={limpiarFiltros}
+                onArchivarItem={ archivarItem}
+                onEditarItem= { editarItem}
+                onRegistrarActividad={registrarActividadItem}
               />
             </div>
             
           </div>
         </div>
       </section>
+            <EstadisticasJournal items={itemsqueActivos} />
     </main>
   );
 

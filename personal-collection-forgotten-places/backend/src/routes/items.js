@@ -5,13 +5,19 @@ const router = express.Router() ;
 
 router.get("/" , (req , res) => {
   try {
-    const rows = db.prepare("SELECT * FROM items WHERE activo = 1 ORDER BY fechaRegistro DESC").all() ;
+    const rows =db.prepare( "SELECT * FROM items WHERE activo = 1 ORDER BY fechaRegistro DESC").all();
 
-    const items = rows.map((item) => ({
-      ...item ,
-      activo: Boolean(item.activo) ,
-      atributos: JSON.parse(item.atributos || "{}")
-    })) ;
+    const items = rows.map((item) => {
+      const registros = db.prepare( "SELECT * FROM registros WHERE itemId = ? ORDER BY fecha DESC").all( item.id) ;
+
+      return {
+          ...item ,
+          activo: Boolean(item.activo) ,
+          atributos: JSON.parse( item.atributos || "{}" ) ,
+          registros
+        };
+        
+    } );
 
     res.json(items) ;
   }
@@ -139,11 +145,17 @@ router.delete("/:id" , (req , res) => {
   }
 }) ;
 
+
 router.post("/:id/registro" , (req , res) => {
+
   const { fecha , valor , notas = "" } = req.body ;
 
   if(valor === undefined || valor === null){
     return res.status(400).json({ error: "El valor del registro es obligatorio" }) ;
+  }
+
+  if(Number(valor) !== 1 && Number(valor) !== -1){
+    return res.status(400).json({ error: "El valor del registro debe ser 1 o -1" }) ;
   }
 
   try {
@@ -157,7 +169,7 @@ router.post("/:id/registro" , (req , res) => {
       id: crypto.randomUUID() ,
       itemId: req.params.id ,
       fecha: fecha || new Date().toISOString().split("T")[0] ,
-      valor ,
+       valor: Number(valor) ,
       notas
     } ;
 
