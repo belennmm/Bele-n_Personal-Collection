@@ -8,6 +8,8 @@ import JournalTimer from "./components/JournalTimer" ;
 import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
 import EstadisticasJournal from "./components/EstadisticasJournal" ;
 
+import useAtajoTeclado from "./hooks/useAtajoTeclado" ;
+
 
 
 
@@ -24,21 +26,10 @@ function App(){
   const filtroEstado = estadoItems.filtroEstado;
   const  busqueda = estadoItems.busqueda;
   
-  useEffect(() => {
 
-      function cambiarTemaConAtajo(e){
-         
-        const escribiendo =["INPUT" , "TEXTAREA", "SELECT"].includes( e.target.tagName) ;
+      useAtajoTeclado("t" , toggleTema) ;
 
-        if(escribiendo ){ return ;}
 
-        if(e.key.toLowerCase( ) === "t" ){ toggleTema(); }
-      }
-
-      window.addEventListener("keydown" , cambiarTemaConAtajo) ;
-
-      return () => { window.removeEventListener( "keydown", cambiarTemaConAtajo) ;} ;
-  } , [toggleTema] ) ;
   
     useEffect(() => {
       async function cargarItems() {
