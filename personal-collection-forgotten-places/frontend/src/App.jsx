@@ -2,13 +2,14 @@ import { useState, useEffect, useContext, useReducer, useMemo, useCallback } fro
 import FormularioItem from "./components/FormularioItem";
 import ListaItems from "./components/ListaItems" ;
 
-import { StorageContext } from "./context/StorageContext" ;
-import { ThemeContext } from "./context/ThemeContext" ;
-import JournalTimer from "./components/JournalTimer" ;
+import { StorageContext } from "./context/StorageContext";
+import { ThemeContext } from "./context/ThemeContext";
+import JournalTimer from "./components/JournalTimer";
 import { itemsReducer, estadoInicialItems } from "./reducers/itemsReducer" ;
 import EstadisticasJournal from "./components/EstadisticasJournal" ;
 
 import useAtajoTeclado from "./hooks/useAtajoTeclado" ;
+import ApiStatus from "./components/ApiStatus";
 
 
 
@@ -206,17 +207,19 @@ function App(){
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-acento)]">Storage mode</p>
             <p className="mt-1 text-sm text-[var(--color-texto)]">Modo actual: {modo}</p>
+            <ApiStatus apiUrl={import.meta.env.VITE_API_URL || "http://localhost:3001"} activo={modo === "API"} />
           </div>
 
           <div className="flex gap-3">
-            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "local" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("local")}>Local</button>
-            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "api" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("api")}>API</button>
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "LOCAL" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("LOCAL")}>Local</button>
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "API" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("API")}>API</button>
+            
           </div>
   
         </div>
 
         {cargando && <p className="mt-3 text-sm text-[var(--color-acento)]">Cargando datos...</p>}
-        {error && <p className="mt-3 text-sm text-[var(--color-acento-secundario)]">Error: {error}</p>}
+        
 
         
       </section>
