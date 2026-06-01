@@ -10,6 +10,7 @@ La idea de mi proyecto fue crear un journal para travelers que disfrutan de luga
 
 ## Video Demo y Explicación
 [DEMOSTRACIÓN Y EXPLICACIÓN DE FORGOTTEN PLACES](https://canva.link/jjql0avo5sfmgwf)
+[DEMOSTRACIÓN Y EXPLICACIÓN DE FORGOTTEN PLACES EN YouTube](https://youtu.be/XmHRlQeoFTs)
 
 ## Demo de Forgotten Places
 
