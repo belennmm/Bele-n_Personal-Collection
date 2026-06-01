@@ -2,10 +2,11 @@ import { useState, useRef , memo} from "react";
 import { animate } from "animejs";
 import { CATEGORIAS } from "../utils/categorias";
 import { ESTADOS } from "../utils/estados";
+import useRecomendacionesLugar from "../hooks/useRecomendacionesLugar" ;
 
 function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) {
   const categoria = CATEGORIAS.find((cat) => cat.id === item.categoriaId);
-    const totalRecomendaciones = item.registros?.reduce((total , registro) => total + Number(registro.valor) , 0) || 0 ;
+  const { totalRecomendaciones, recomendarLugar: registrarRecomendacion, corregirRecomendacion: corregirRegistroRecomendacion} = useRecomendacionesLugar(item, onRegistrarActividad);
 
   
   const [mostrarEmoji, setMostrarEmoji] = useState(false);
@@ -26,16 +27,17 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
       region: item.atributos?.region || "Centroamérica",
       nivelOlvido: item.atributos?.nivelOlvido || "medio",
       epoca: item.atributos?.epoca || "",
-      acceso: item.atributos?.acceso || "moderado",
+      acceso: item.atributos?.acceso || "moderado" ,
       razonInteres: item.atributos?.razonInteres || ""
     }
   });
 
     function cambiarMarkerCategoria() {
+
     animate(categoriaMarkerRef.current, {
-      scale: [1, 0.7, 1],
+      scale: [1, 0.7, 1 ],
       rotate: mostrarEmoji ? "-1turn" : "1turn",
-      duration: 550,
+      duration: 550 ,
       ease: "inOut(3)"
     });
 
@@ -47,7 +49,7 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
       nombre: item.nombre,
       categoriaId: item.categoriaId,
       estado: item.estado,
-      puntuacion: item.puntuacion !== null ? item.puntuacion : "",
+      puntuacion: item.puntuacion !== null ? item.puntuacion : "" ,
       notas: item.notas,
       atributos: {
         pais: item.atributos?.pais || "",
@@ -57,6 +59,7 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
         acceso: item.atributos?.acceso || "moderado",
         razonInteres: item.atributos?.razonInteres || ""
       }
+
     });
 
     setEditando(true);
@@ -96,7 +99,7 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
       notas: formEdit.notas.trim(),
       atributos: {
         ...formEdit.atributos,
-        pais: formEdit.atributos.pais.trim(),
+        pais: formEdit.atributos.pais.trim( ) ,
         region: "Centroamérica",
         epoca: formEdit.atributos.epoca.trim(),
         razonInteres: formEdit.atributos.razonInteres.trim()
@@ -109,80 +112,94 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
   }
 
     async function recomendarLugar() {
-    await onRegistrarActividad(item.id , 1) ;
 
-    const distanciaVuelo = rutaVueloRef.current.offsetWidth - 32 ;
+      await registrarRecomendacion() ;
 
-    animate(avionRef.current , {
-      x: [0 , distanciaVuelo] ,
-      y: [0 , -10 , 0] ,
-      rotate: [-10 , 4 , 0] ,
-      opacity: [0 , 1 , 1 , 0] ,
-      duration: 1000 ,
-      ease: "inOut(3)"
-    }) ;
-  }
+      const distanciaVuelo = rutaVueloRef.current.offsetWidth - 32 ;
 
-  async function corregirRecomendacion() {
-    if(totalRecomendaciones === 0){
-      return ;
+      animate(avionRef.current , {
+        x: [0, distanciaVuelo],
+        y: [0, -10 , 0] ,
+        rotate: [-10, 4, 0] ,
+        opacity: [0, 1, 1 , 0] ,
+        duration: 1000 ,
+        ease: "inOut(3)"
+      }) ;
     }
 
-    await onRegistrarActividad(item.id , -1) ;
+  async function corregirRecomendacion() {
+    if(totalRecomendaciones === 0){return ; }
+
+    await corregirRegistroRecomendacion() ;
 
     const distanciaVuelo = rutaVueloRef.current.offsetWidth - 32 ;
 
     animate(avionRef.current , {
       x: [distanciaVuelo , 0] ,
-      y: [0 , -7 , 0] ,
-      rotate: [180 , 170 , 180] ,
-      opacity: [0 , 0.75 , 0.75 , 0] ,
+      y: [0 , -7, 0],
+      rotate: [180, 170, 180 ],
+      opacity: [0, 0.75 , 0.75, 0],
       duration: 850 ,
       ease: "inOut(3)"
     }) ;
   }
 
   if(editando){
+
     return (
       <article className="itemMagazineEdit min-h-[540px] border-y border-[var(--color-acento)] py-8">
+
         <div className="mb-8 border-b border-[var(--color-acento)] pb-6">
           <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--color-titulo-pagina)]">Edit travel entry</p>
-          <h3 className="mt-4 text-4xl font-black uppercase leading-[0.9] tracking-[-0.07em] text-[var(--color-acento)]">Editar entrada</h3>
+          <h3 className="mt-4 text-4xl font-black uppercase leading-[0.9] tracking-[-0.07em] text-[var(--color-acento)]">Editar entrada</h3 >
+        
         </div>
 
         <form onSubmit={guardarCambios} className="grid gap-7">
           <div className="campoEdit grid gap-2">
             <label htmlFor={`nombre-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Nombre del lugar</label>
             <input id={`nombre-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" type="text" name="nombre" value={formEdit.nombre} onChange={cambiarCampo} required />
+          
           </div>
 
           <div className="grid gap-7 md:grid-cols-2">
             <div className="campoEdit grid gap-2">
-              <label htmlFor={`pais-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">País</label>
+
+              <label htmlFor={`pais-${item.id }`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">País</label >
               <input id={`pais-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" type="text" name="pais" value={formEdit.atributos.pais} onChange={cambiarAtributo} required />
             </div>
 
             <div className="campoEdit grid gap-2">
               <label htmlFor={`categoria-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Categoría</label>
               <select id={`categoria-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="categoriaId" value={formEdit.categoriaId} onChange={cambiarCampo}>
-                {CATEGORIAS.map((categoriaItem) => (
+                {CATEGORIAS.map((categoriaItem ) =>(
                   <option key={categoriaItem.id} value={categoriaItem.id}>
                     {categoriaItem.nombre}
+
                   </option>
+
                 ))}
               </select>
             </div>
+
           </div>
 
           <div className="grid gap-7 md:grid-cols-2">
+
             <div className="campoEdit grid gap-2">
+
               <label htmlFor={`estado-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Estado de exploración</label>
+              
               <select id={`estado-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="estado" value={formEdit.estado} onChange={cambiarCampo}>
-                {ESTADOS.map((estadoItem) => (
-                  <option key={estadoItem} value={estadoItem}>
+                
+                {ESTADOS.map( (estadoItem) =>(
+                  <option key={estadoItem} value = {estadoItem}>
                     {estadoItem}
+
                   </option>
+                  
                 ))}
+
               </select>
             </div>
 
@@ -190,11 +207,13 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
               <label className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Puntuación personal</label>
 
               <div className="flex gap-2 border-b border-[var(--color-acento)] pb-3">
-                {[1 , 2 , 3 , 4 , 5].map((estrella) => (
+
+                { [1 , 2 , 3 , 4 , 5].map((estrella) =>(
                   <button className={`text-3xl transition ${estrella <= Number(formEdit.puntuacion) ? "text-[var(--color-acento)]" : "text-[#CBBDA6] hover:text-[var(--color-acento)]"}`} key={estrella} type="button" onClick={() => setFormEdit({ ...formEdit , puntuacion: estrella })}>
                     ★
                   </button>
-                ))}
+                )) }
+
               </div>
 
               <p className="text-xs uppercase tracking-[0.18em] text-[var(--color-titulo-pagina)]">{formEdit.puntuacion ? `${formEdit.puntuacion} de 5 estrellas` : "Selecciona una calificación"}</p>
@@ -202,43 +221,53 @@ function ItemCard({ item, onArchivarItem, onEditarItem, onRegistrarActividad }) 
           </div>
 
           <div className="campoEdit grid gap-2">
+            
             <label htmlFor={`nivelOlvido-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">¿Qué tan olvidado consideras que está el lugar por turistas?</label>
-            <select id={`nivelOlvido-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="nivelOlvido" value={formEdit.atributos.nivelOlvido} onChange={cambiarAtributo}>
+            <select id={`nivelOlvido-${ item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="nivelOlvido" value={formEdit.atributos.nivelOlvido} onChange={cambiarAtributo}>
+              
               <option value="bajo">Poco olvidado</option>
               <option value="medio">Medio olvidado</option>
-              <option value="alto">Muy olvidado</option>
+              <option value="alto">Muy olvidado</option >
+            
             </select>
           </div>
 
           <div className="grid gap-7 md:grid-cols-2">
             <div className="campoEdit grid gap-2">
-              <label htmlFor={`epoca-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Época o contexto</label>
-              <input id={`epoca-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" type="text" name="epoca" value={formEdit.atributos.epoca} onChange={cambiarAtributo} />
+              <label htmlFor={`epoca-${item.id }`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Época o contexto</label>
+              <input id={`epoca-${ item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" type="text" name="epoca" value={formEdit.atributos.epoca} onChange={cambiarAtributo} />
             </div>
 
             <div className="campoEdit grid gap-2">
-              <label htmlFor={`acceso-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Acceso</label>
-              <select id={`acceso-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="acceso" value={formEdit.atributos.acceso} onChange={cambiarAtributo}>
+              <label htmlFor={`acceso-${item.id }`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Acceso</label>
+              <select id={`acceso-${item.id}`} className="border-0 border-b border-[var(--color-acento)] bg-transparent px-0 py-3 text-lg text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="acceso" value = {formEdit.atributos.acceso} onChange={cambiarAtributo}>
                 <option value="facil">Acceso fácil</option>
-                <option value="moderado">Acceso moderado</option>
+
+                <option value="moderado">Acceso moderado</option >
                 <option value="dificil">Acceso difícil</option>
+
               </select>
             </div>
           </div>
 
           <div className="campoEdit grid gap-2">
+
             <label htmlFor={`razonInteres-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Razón de interés</label>
-            <textarea id={`razonInteres-${item.id}`} className="min-h-28 border border-[var(--color-acento)] bg-transparent p-4 text-lg leading-7 text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="razonInteres" value={formEdit.atributos.razonInteres} onChange={cambiarAtributo} />
+            <textarea id={`razonInteres-${item.id}`} className="min-h-28 border border-[var(--color-acento)] bg-transparent p-4 text-lg leading-7 text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="razonInteres" value={formEdit.atributos.razonInteres } onChange={cambiarAtributo} />
           </div>
 
           <div className="campoEdit grid gap-2">
             <label htmlFor={`notas-${item.id}`} className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)]">Notas personales</label>
+           
             <textarea id={`notas-${item.id}`} className="min-h-24 border border-[var(--color-acento)] bg-transparent p-4 text-lg leading-7 text-[var(--color-texto-pagina)] outline-none focus:border-[var(--color-titulo-pagina)]" name="notas" value={formEdit.notas} onChange={cambiarCampo} />
           </div>
 
+
           <div className="mt-4 flex flex-col gap-4 border-t border-[var(--color-acento)] pt-7 sm:flex-row sm:justify-end">
-            <button className="rounded-full border border-[var(--color-titulo-pagina)] px-7 py-3 text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)] transition hover:bg-[var(--color-titulo-pagina)] hover:text-[var(--color-pagina)]" type="button" onClick={() => setEditando(false)}>Cancelar</button>
+
+            <button className="rounded-full border border-[var(--color-titulo-pagina)] px-7 py-3 text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-titulo-pagina)] transition hover:bg-[var(--color-titulo-pagina)] hover:text-[var(--color-pagina)]" type="button" onClick={() => setEditando(false )}>Cancelar</button>
             <button className="rounded-full border border-[var(--color-acento)] bg-[var(--color-acento)] px-7 py-3 text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-texto-pagina)] transition hover:bg-[var(--color-titulo-pagina)] hover:text-[var(--color-pagina)]" type="submit">Guardar cambios</button>
+          
           </div>
         </form>
       </article>
