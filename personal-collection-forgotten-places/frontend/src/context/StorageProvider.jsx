@@ -9,6 +9,7 @@ function StorageProvider({ children }){
   const [error , setError ] = useState(null) ;
 
   const API_URL = import.meta.env.VITE_API_URL  || "http://localhost:3001" ;
+  const LOCAL_ITEMS_KEY = "forgotten_places_items_local" ;
   
 
   function setModo(nuevoModo){
@@ -31,7 +32,7 @@ function StorageProvider({ children }){
         return await res.json() ;
       }
 
-      const data = localStorage.getItem( "items") ;
+      const data = localStorage.getItem(LOCAL_ITEMS_KEY) ;
 
       return data ? JSON.parse(data) : [] ;
 
@@ -68,12 +69,12 @@ function StorageProvider({ children }){
         return await res.json() ;
       }
 
-      const data = localStorage.getItem("items") ;
+      const data = localStorage.getItem(LOCAL_ITEMS_KEY) ;
 
       const itemsActuales = data ? JSON.parse(data) : [] ;
       const nuevaLista  = [...itemsActuales , item] ;
 
-      localStorage.setItem("items" , JSON.stringify(nuevaLista)) ;
+      localStorage.setItem(LOCAL_ITEMS_KEY , JSON.stringify(nuevaLista)) ;
 
       return item ;
 
@@ -103,12 +104,12 @@ function StorageProvider({ children }){
         return await res.json() ;
       }
 
-      const data = localStorage.getItem("items") ;
+      const data = localStorage.getItem(LOCAL_ITEMS_KEY) ;
       const itemsActuales = data ? JSON.parse(data) : [] ;
 
       const nuevaLista = itemsActuales.map((item) => item.id === id ? { ...item , ...itemUpdated } : item ) ;
 
-      localStorage.setItem("items" , JSON.stringify(nuevaLista)) ;
+      localStorage.setItem(LOCAL_ITEMS_KEY , JSON.stringify(nuevaLista)) ;
 
       return itemUpdated ;
 
@@ -140,12 +141,12 @@ function StorageProvider({ children }){
         return true ;
       }
 
-      const data = localStorage.getItem("items") ;
+      const data = localStorage.getItem(LOCAL_ITEMS_KEY) ;
       const itemsActuales = data ? JSON.parse(data) : [] ;
 
       const nuevaLista = itemsActuales.map((item) => item.id === id ? { ...item , activo: false } : item ) ;
 
-      localStorage.setItem("items" , JSON.stringify(nuevaLista)) ;
+      localStorage.setItem(LOCAL_ITEMS_KEY , JSON.stringify(nuevaLista)) ;
 
       return true ;
     }
@@ -178,7 +179,7 @@ function StorageProvider({ children }){
         return await res.json() ;
       }
 
-      const data = localStorage.getItem("items") ;
+      const data = localStorage.getItem(LOCAL_ITEMS_KEY) ;
       const itemsActuales = data ? JSON.parse(data) : [] ;
 
       const nuevaLista = itemsActuales.map((item) =>
@@ -189,7 +190,7 @@ function StorageProvider({ children }){
         } : item
       );
 
-      localStorage.setItem("items" , JSON.stringify(nuevaLista)) ;
+      localStorage.setItem(LOCAL_ITEMS_KEY , JSON.stringify(nuevaLista)) ;
 
       return registro ;
     }

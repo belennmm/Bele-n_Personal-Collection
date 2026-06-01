@@ -7,6 +7,12 @@ function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda
   const [paginaActual, setPaginaActual] = useState(0);
 
   useEffect(() => {
+  if(paginaActual > items.length - 1){
+    setPaginaActual(Math.max(items.length - 1 , 0));
+  }
+} , [items.length , paginaActual]) ;
+
+  useEffect(() => {
     setPaginaActual(0) ;
   }, [busqueda , filtroCategoria, filtroEstado] );
 
@@ -23,6 +29,9 @@ function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda
   function mostrarSiguiente() {
     if (paginaActual < items.length - 1){  setPaginaActual(paginaActual + 1);  }
   }
+
+  const indiceSeguro =  Math.min(paginaActual, Math.max(items.length - 1, 0)) ;
+  const itemActual = items[indiceSeguro];
 
   return (
     <section className="listaMagazine">
@@ -81,7 +90,7 @@ function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda
         <>
           <div className="mb-5 flex items-center justify-between">
             
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-titulo-pagina)]"> Page {String(paginaActual + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-titulo-pagina)]"> Page {String(indiceSeguro + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</p>
 
             <div className ="flex gap-3">
               <button className = "rounded-full border border-[var(--color-acento)] px-4 py-2 text-sm font-bold text-[var(--color-titulo-pagina)] transition hover:bg-[var(--color-acento)] hover:text-[var(--color-texto-pagina)] disabled:cursor-not-allowed disabled:opacity-30" type="button" onClick={mostrarAnterior} disabled={ paginaActual === 0} >←</button>
@@ -91,13 +100,15 @@ function ListaItems({ items, totalItems, filtroCategoria, filtroEstado, busqueda
 
           </div>
 
-          <ItemCard
-            key = { items[paginaActual ].id}
-            item ={items[paginaActual] }
-            onArchivarItem= {onArchivarItem }
-            onEditarItem= { onEditarItem}
-            onRegistrarActividad={onRegistrarActividad}
-          />
+          {itemActual && (
+            <ItemCard
+              key={itemActual.id}
+              item={itemActual}
+              onArchivarItem={onArchivarItem}
+              onEditarItem={onEditarItem}
+              onRegistrarActividad={onRegistrarActividad}
+            />
+          )}
 
         </>
       )}

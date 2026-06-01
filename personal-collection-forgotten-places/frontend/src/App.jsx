@@ -32,14 +32,24 @@ function App(){
 
 
   
-    useEffect(() => {
+        useEffect(() => {
+      let activo = true ;
+
       async function cargarItems() {
+        dispatch( { type : "HIDRATAR" ,  payload: [] });
+
         const data = await obtenerItems() ;
-        
-        dispatch( { type : "HIDRATAR" ,  payload: data });
+
+        if(activo){
+          dispatch( { type : "HIDRATAR" ,  payload: data });
+        }
       }
       
       cargarItems() ;
+
+      return () => {
+        activo = false ;
+      } ;
     } , [obtenerItems, modo]) ;
 
     const agregarItem = useCallback(async (newItem) => {
@@ -207,12 +217,12 @@ function App(){
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-acento)]">Storage mode</p>
             <p className="mt-1 text-sm text-[var(--color-texto)]">Modo actual: {modo}</p>
-            <ApiStatus apiUrl={import.meta.env.VITE_API_URL || "http://localhost:3001"} activo={modo === "API"} />
+            <ApiStatus apiUrl={import.meta.env.VITE_API_URL || "http://localhost:3001"} activo={modo === "api"} />
           </div>
 
           <div className="flex gap-3">
-            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "LOCAL" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("LOCAL")}>Local</button>
-            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "API" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("API")}>API</button>
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "local" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("local")}>Local</button>
+            <button className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] ${modo === "api" ? "bg-[var(--color-acento)] text-[var(--color-fondo)]" : "border border-[var(--color-acento)] text-[var(--color-acento)]"}`} type="button" onClick={() => setModo("api")}>API</button>
             
           </div>
   
