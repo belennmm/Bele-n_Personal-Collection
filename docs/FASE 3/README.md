@@ -321,8 +321,6 @@ Fue más compleja que la de categorías porque no dependía únicamente de conta
 
 Utilicé inteligencia artificial como apoyo puntual para implementar la animación del avión con Anime.js.
 
-La lógica principal del proyecto, el diseño, el reducer, las gráficas y la integración final fueron revisadas y adaptadas dentro de mi código.
-
 ### 14.1 Animación del avión
 
 Consulta realizada:
