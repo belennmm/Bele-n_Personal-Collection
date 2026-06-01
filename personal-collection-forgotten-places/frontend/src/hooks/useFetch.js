@@ -1,3 +1,12 @@
+/**
+ * Este es el hook que maneja las peticiones a la API. Hace la petición, maneja el estado de carga y errores, y muestra los datos
+ * Recibe la petición HTTP con el URL, las  opciones de la petición y un booleano para activar o desactivar la petición. 
+ * @param {string} url es la URL a la que se realizará la petición.
+ * @param {object} options son las opciones para fetch, como el method, headers o el body
+ * @param {boolean} activo este dice si la petición debe ejecutarse
+ * @returns {{data: *, loading: boolean, error: string|null}} devuelve los datos, estado de carga y un mensaje de error cuando aplica
+ */
+
 import { useState,  useEffect} from "react";
 
 function useFetch( url, options = { } , activo =true){
